@@ -1,1 +1,1405 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woodloom | প্রিমিয়াম কাঠের হস্তশিল্প</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* == Woodloom থিম কালার == */
+        :root {
+            --theme-dark-brown: #3E2723;   /* গাঢ় কাঠ */
+            --theme-medium-brown: #5D4037; /* মাঝারি কাঠ */
+            --theme-light-cream: #FFF8E1;  /* হালকা ক্রিম ব্যাকগ্রাউন্ড */
+            --theme-accent-gold: #FFB300;  /* সোনালী অ্যাকসেন্ট */
+            --theme-text-dark: #333;
+            --theme-text-light: #f4f4f4;
+            --theme-accent-red: #e53935;
+            --theme-accent-green: #4CAF50;
+            --theme-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
 
+        /* == অ্যানিমেশন কীফ্রেমস্ == */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardTilt {
+            0% { transform: perspective(1000px) rotateY(0deg); }
+            50% { transform: perspective(1000px) rotateY(2deg); }
+            100% { transform: perspective(1000px) rotateY(0deg); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* == ১. প্রাথমিক রিসেট ও গ্লোবাল স্টাইল (Woodloom লাইট থিম) == */
+        * { margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Baloo Da 2', 'Poppins', sans-serif; 
+        }
+        body { 
+            background-color: var(--theme-light-cream); 
+            color: var(--theme-text-dark); 
+            line-height: 1.6; 
+            padding-bottom: 70px; 
+            overflow-x: hidden;
+            opacity: 0; 
+            transition: opacity 0.5s;
+        }
+        a { text-decoration: none; color: var(--theme-medium-brown); }
+        input::placeholder { color: #888; }
+        body.loaded { opacity: 1; }
+        
+        /* স্প্ল্যাশ স্ক্রিন স্টাইল */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--theme-light-cream); 
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.7s ease-out;
+        }
+        #splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none; 
+        }
+        .loader-container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader {
+            font-size: 50px;
+            color: var(--theme-medium-brown); 
+            animation: bounce 1.2s infinite ease-in-out; 
+            margin-bottom: 10px;
+        }
+        .loading-text {
+            margin-top: 15px;
+            font-size: 18px;
+            color: var(--theme-medium-brown);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* == ২. হেডার ডিজাইন == */
+        .main-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 20px; 
+            background-color: var(--theme-dark-brown); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+        }
+        .logo { 
+            font-size: 28px; 
+            font-weight: 800; 
+            color: var(--theme-accent-gold); 
+            text-shadow: 0 0 10px rgba(255, 179, 0, 0.5); 
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px; 
+            width: auto;
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            border-radius: 5px;
+        }
+        .dot-menu-btn { 
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s; 
+            padding: 5px;
+        }
+        .dot-menu-btn:hover { transform: scale(1.1); }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 55px; 
+            right: 15px;
+            background-color: var(--theme-dark-brown);
+            border: 1px solid var(--theme-accent-gold);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 180px;
+            z-index: 1000;
+            display: none;
+            padding: 5px 0;
+        }
+        .dropdown-menu.show {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .dropdown-menu a:hover {
+            background-color: var(--theme-medium-brown);
+            color: var(--theme-accent-gold);
+        }
+        .dropdown-menu a i { margin-right: 8px; }
+
+        .discount-banner {
+            background-color: var(--theme-medium-brown);
+            color: var(--theme-text-light);
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            animation: pulse 2s infinite;
+            border-bottom: 2px solid var(--theme-accent-gold);
+        }
+        .discount-banner strong {
+            color: var(--theme-accent-gold);
+            font-size: 1.1em;
+            margin: 0 3px;
+        }
+
+        /* == ৩. কনটেন্ট ও প্রোডাক্ট গ্রিড == */
+        .content-area { padding: 25px 15px; }
+        .page-title { 
+            font-size: 24px; 
+            margin-bottom: 30px; 
+            text-align: center; 
+            color: var(--theme-dark-brown); 
+            padding-bottom: 10px; 
+            animation: fadeIn 1s ease-out; 
+            border-bottom: 2px solid var(--theme-accent-gold); 
+        }
+        
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; 
+            max-width: 950px; 
+            margin: 0 auto; 
+        }
+        .product-card { 
+            background-color: #ffffff; 
+            border-radius: 15px; 
+            text-align: center; 
+            padding-bottom: 15px;
+            box-shadow: var(--theme-shadow); 
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s; 
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            overflow: hidden;
+        }
+        .product-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15); 
+            border-color: var(--theme-medium-brown);
+            animation: cardTilt 1.2s infinite alternate; 
+        }
+        .card-image img {
+            width: 100%;
+            height: 150px; 
+            object-fit: cover; 
+            margin-bottom: 10px;
+        }
+        .card-title { font-size: 17px; font-weight: 700; margin-bottom: 4px; color: var(--theme-dark-brown); }
+        .card-price { font-size: 15px; font-weight: 800; color: var(--theme-accent-red); }
+        .card-price .original-price {
+            text-decoration: line-through;
+            font-size: 0.85em;
+            color: #999;
+            margin-right: 5px;
+        }
+        
+        /* == ৪. পেমেন্ট পেজ স্টাইল == */
+        .cashier-container { 
+            max-width: 450px; 
+            margin: 20px auto; 
+            background-color: #ffffff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
+            color: var(--theme-text-dark); 
+            animation: fadeIn 0.8s ease-out; 
+            border-top: 5px solid var(--theme-medium-brown);
+        }
+        .page-header h2 { font-size: 22px; font-weight: 700; color: var(--theme-dark-brown); }
+        
+        .method-selector { display: flex; justify-content: space-around; gap: 10px; margin-bottom: 25px; }
+        .method-btn { 
+            flex-grow: 1; 
+            padding: 10px 5px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            border: 2px solid transparent;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #bkash-btn { background-color: #ffe0b2; color: #c0392b; border-color: #c0392b; }
+        #nagad-btn { background-color: #e8f5e9; color: #4caf50; border-color: #4caf50; }
+        #rocket-btn { background-color: #e3f2fd; color: #303f9f; border-color: #303f9f; }
+        
+        .method-btn.selected { 
+            transform: translateY(-3px) scale(1.02); 
+            border-width: 3px; 
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--theme-dark-brown); font-size: 14px; }
+        .input-group input, .input-group textarea { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            font-size: 15px; 
+            transition: border-color 0.3s, box-shadow 0.3s; 
+            background-color: #ffffff;
+            color: #333;
+            box-sizing: border-box; 
+        }
+        .input-group input:focus, .input-group textarea:focus { 
+            border-color: var(--theme-medium-brown); 
+            box-shadow: 0 0 8px rgba(93, 64, 55, 0.4); 
+            outline: none; 
+        }
+        .input-group small.mandatory {
+            color: var(--theme-accent-red);
+            font-weight: 700;
+            font-size: 11px;
+        }
+        
+        .submit-btn-payment { 
+            width: 100%; 
+            padding: 15px; 
+            background-color: var(--theme-medium-brown); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 25px; 
+            box-shadow: 0 6px 12px rgba(93, 64, 55, 0.4); 
+            transition: background-color 0.3s, transform 0.2s; 
+        }
+        .submit-btn-payment:hover { background-color: var(--theme-dark-brown); transform: translateY(-2px); }
+        
+        .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 8px 0; border-bottom: 1px dashed #ddd; }
+        .detail-row .value { font-weight: bold; }
+        .copy-btn { 
+            background: none; 
+            border: none; 
+            color: var(--theme-medium-brown); 
+            cursor: pointer; 
+            font-size: 16px; 
+            margin-left: 5px; 
+            transition: transform 0.2s; 
+            padding: 5px;
+        }
+        .copy-btn:hover { transform: scale(1.2); }
+        
+        .countdown { 
+            background-color: var(--theme-dark-brown); 
+            color: white; 
+            padding: 8px 12px; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            font-size: 14px;
+        }
+        .alert-box { 
+            background-color: #fff3e0; 
+            color: var(--theme-accent-red); 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 25px; 
+            font-size: 14px; 
+            border-left: 5px solid var(--theme-accent-red); 
+        }
+        .important-text { font-weight: bold; color: #b71c1c; }
+        
+        .discount-details {
+            padding: 10px 0;
+            border-top: 1px dashed var(--theme-medium-brown);
+            border-bottom: 1px dashed var(--theme-medium-brown);
+            margin-bottom: 20px;
+        }
+        .discount-row {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .discount-row .label { font-weight: 600; color: #555; }
+        .discount-row .value { font-weight: 700; color: var(--theme-accent-red); }
+        .coupon-row .value {
+            color: var(--theme-accent-green) !important;
+        }
+        
+        /* == ৯. ডেলিভারি চার্জ স্টাইল (নতুন) == */
+        .delivery-selector {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .delivery-btn {
+            flex-grow: 1;
+            padding: 12px 5px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid var(--theme-medium-brown);
+            background-color: #ffffff;
+            color: var(--theme-dark-brown);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 14px;
+        }
+        .delivery-btn.selected-delivery {
+            transform: scale(1.02);
+            border-width: 3px;
+            background-color: var(--theme-medium-brown);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .delivery-cost-row {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            padding: 8px 0; 
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        /* == ৫. কনফার্মেশন মডাল == */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 10000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.8); 
+            padding-top: 50px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto; 
+            padding: 25px;
+            border: 4px solid var(--theme-medium-brown);
+            width: 90%; 
+            max-width: 350px;
+            border-radius: 10px;
+            color: #333;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content h3 {
+            color: var(--theme-accent-red);
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+        .modal-content p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .modal-content span {
+            font-weight: 700;
+            color: var(--theme-dark-brown);
+        }
+        .modal-content .final-amount {
+            color: var(--theme-accent-green);
+            font-size: 18px;
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+            font-weight: 800;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+        }
+        #modal-confirm-btn {
+            background-color: var(--theme-accent-green);
+            color: white;
+        }
+        #modal-cancel-btn {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        /* == ৬. SUCCESS PAGE ডিজাইন == */
+        .success-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); 
+            text-align: center;
+            color: #333;
+            animation: fadeIn 1s ease-out;
+            border: 4px solid var(--theme-accent-green); 
+        }
+        .success-icon {
+            font-size: 90px;
+            color: var(--theme-accent-green);
+            margin-bottom: 25px;
+            animation: pulse 1s infinite;
+        }
+        .success-container h2 {
+            font-size: 30px;
+            color: #008000;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .success-container p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        .next-steps {
+            background-color: #e8f5e9; 
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            border: 1px dashed var(--theme-accent-green);
+        }
+        .next-steps p {
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--theme-dark-brown);
+        }
+        .next-steps a {
+            color: var(--theme-medium-brown);
+            font-weight: 700;
+        }
+        .next-steps i {
+            margin-right: 8px;
+            color: var(--theme-medium-brown);
+        }
+        .order-code-display {
+            display: block;
+            background-color: #fff3e0;
+            color: var(--theme-accent-red);
+            font-size: 20px;
+            font-weight: 800;
+            padding: 10px;
+            margin: 15px auto;
+            border-radius: 8px;
+            border: 2px dashed var(--theme-accent-red);
+        }
+        
+        /* == ৭. টেস্টিমোনিয়াল সেকশন == */
+        .testimonial-section {
+            padding: 30px 15px;
+            background-color: #EFEBE9; 
+            margin-top: 30px;
+            border-top: 3px solid var(--theme-accent-gold);
+            text-align: center;
+        }
+        .testimonial-section h2 {
+            font-size: 22px;
+            color: var(--theme-dark-brown);
+            margin-bottom: 20px;
+        }
+        .testimonial-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 15px;
+        }
+        .testimonial-card {
+            min-width: 250px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--theme-accent-green);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .testimonial-card p {
+            font-style: italic;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .testimonial-card .author {
+            font-weight: 700;
+            color: var(--theme-dark-brown);
+            display: block;
+            margin-top: 5px;
+        }
+        .testimonial-card .rating {
+            color: var(--theme-accent-gold);
+        }
+        
+        /* == ৮. ফুটার নেভিগেশন == */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background-color: var(--theme-dark-brown); 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            padding: 10px 0; 
+            border-top: 1px solid var(--theme-medium-brown); 
+            z-index: 1000; 
+        }
+        .nav-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            font-size: 10px; 
+            color: var(--theme-text-light); 
+            padding: 5px; 
+            transition: color 0.3s, transform 0.2s; 
+            flex-grow: 1; 
+            flex-basis: 0;
+        }
+        .nav-item i { font-size: 18px; margin-bottom: 3px; }
+        .nav-item:hover, .nav-item.active { 
+            color: var(--theme-accent-gold); 
+            transform: translateY(-3px); 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="loader-container">
+            <i class="fa-solid fa-tree loader"></i>
+        </div>
+        <div class="loading-text">Woodloom লোড হচ্ছে...</div>
+    </div>
+
+    <header class="main-header" role="banner" aria-label="Main Navigation Header">
+        
+        <a href="#" class="logo" onclick="showPage('home-page'); return false;" aria-label="Woodloom Home">
+            <img src="https://i.postimg.cc/YSy31GQV/1762677360931.png" alt="Woodloom Logo">
+            WOODLOOM
+        </a>
+        
+        <button class="dot-menu-btn" onclick="toggleDropdown()" aria-label="More Options Menu">
+            <i class="fa-solid fa-ellipsis-v"></i>
+        </button>
+        
+        <div class="dropdown-menu" id="header-dropdown" role="menu">
+            <a href="https://wa.me/8801709288934" target="_blank" role="menuitem">
+                <i class="fa-brands fa-whatsapp"></i> হোয়াটসঅ্যাপ
+            </a>
+            <a href="#" target="_blank" role="menuitem">
+                <i class="fa-brands fa-facebook-f"></i> ফেসবুক পেজ
+            </a>
+        </div>
+        
+    </header>
+
+    <div class="discount-banner" id="global-discount-banner" role="alert">
+        <i class="fa-solid fa-tag"></i> 🚨 দারুণ অফার! সকল পণ্যে **২০%** ফ্ল্যাট ডিসকাউন্ট চলছে! 🚀
+    </div>
+
+    <div id="home-page" style="display: none;">
+        <main class="content-area" role="main">
+            <h1 class="page-title">প্রিমিয়াম কাঠের শোপিস ও উপহার সামগ্রী</h1>
+            
+            <section class="product-grid" aria-label="Available Products">
+                
+                <article class="product-card" data-item="কাঠের টিস্যু বক্স" data-price="599" data-original-price="749">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" alt="কাঠের টিস্যু বক্স">
+                    </div>
+                    <div class="card-title">টিস্যু বক্স</div>
+                    <p class="card-price"><span class="original-price">৳৭৪৯</span> ৳৫৯৯</p>
+                </article>
+
+                <article class="product-card" data-item="৩-ড্রয়ার মেডিসিন বক্স" data-price="750" data-original-price="938">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/PqzHJHZk/IMG-20251109-WA0006.jpg" alt="মেডিসিন বক্স">
+                    </div>
+                    <div class="card-title">মেডিসিন বক্স</div>
+                    <p class="card-price"><span class="original-price">৳৯৩৮</span> ৳৭৫০</p>
+                </article>
+
+                <article class="product-card" data-item="নকশা করা জুয়েলারি বক্স" data-price="700" data-original-price="875">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/59Zfssxz/IMG-20251109-WA0013.jpg" alt="জুয়েলারি বক্স">
+                    </div>
+                    <div class="card-title">জুয়েলারি বক্স</div>
+                    <p class="card-price"><span class="original-price">৳৮৭৫</span> ৳৭০০</p>
+                </article>
+                
+                <article class="product-card" data-item="১ লক্ষ টাকা সেভিং বক্স" data-price="650" data-original-price="813">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/BQcR2ptq/IMG-20251109-WA0002.jpg" alt="সেভিং বক্স">
+                    </div>
+                    <div class="card-title">সেভিং বক্স</div>
+                    <p class="card-price"><span class="original-price">৳৮১৩</span> ৳৬৫০</p>
+                </article>
+                
+                <article class="product-card custom-order-card" data-item="কাস্টম অর্ডার" data-price="0" data-original-price="0">
+                    <div class="card-image">
+                        <img src="https://placehold.co/300x300/EFEBE9/5D4037?text=Custom+Order" alt="কাস্টম অর্ডার">
+                    </div>
+                    <div class="card-title">কাস্টম অর্ডার</div>
+                    <p class="card-price">মূল্য আলোচনা সাপেক্ষে</p>
+                </article>
+
+            </section>
+            
+            <section class="testimonial-section" aria-label="Customer Testimonials">
+                 <h2>গ্রাহকের আস্থা ও মতামত</h2>
+                 <div class="testimonial-carousel">
+                     <div class="testimonial-card">
+                         <div class="rating">★★★★★</div>
+                         <p>"জুয়েলারি বক্সটা ছবির থেকেও বেশি সুন্দর। ফিনিশিং খুবই ভালো। ধন্যবাদ Woodloom।"</p>
+                         <span class="author">- আফসানা মিমি</span>
+                     </div>
+                     <div class="testimonial-card">
+                         <div class="rating">★★★★★</div>
+                         <p>"খুব দ্রুত ডেলিভারি পেয়েছি। মেডিসিন বক্সটা বাসার মুরুব্বীদের জন্য খুবই উপকারী।"</p>
+                         <span class="author">- রিয়াজুল ইসলাম</span>
+                     </div>
+                     <div class="testimonial-card">
+                         <div class="rating">★★★★★</div>
+                         <p>"কাস্টম অর্ডার করেছিলাম, ডিজাইন যেমন চেয়েছি ঠিক তেমনই পেয়েছি। সেরা সার্ভিস।"</p>
+                         <span class="author">- ফারহানা হক</span>
+                     </div>
+                     <div class="testimonial-card">
+                         <div class="rating">★★★★★</div>
+                         <p>"সেভিংস বক্সটা বাচ্চাদের জন্য কিনেছি। তারা খুব খুশি। কোয়ালিটি চমৎকার।"</p>
+                         <span class="author">- মিনার রহমান</span>
+                     </div>
+                 </div>
+            </section>
+            
+        </main>
+    </div>
+
+    <div id="payment-page" style="display: none;">
+        <div class="cashier-container" role="form" aria-label="Payment and Checkout Form">
+            
+            <div class="page-header">
+                <i class="fa-solid fa-arrow-left" style="color:#555; cursor: pointer;" onclick="showPage('home-page')" aria-label="Go Back"></i>
+                <h2 style="margin-top: 10px;">অর্ডার কনফার্মেশন ফরম</h2>
+                <span id="current-item-display" style="font-weight: bold; color: var(--theme-medium-brown); display: block; margin-top: 5px;"></span>
+            </div>
+            
+            <section class="customer-info" style="margin-top: 20px; padding-bottom: 5px; border-bottom: 1px solid #ddd;">
+                
+                 <div class="input-group">
+                    <label for="customer-name"><i class="fa-solid fa-user-tag"></i> আপনার পুরো নাম (আবশ্যিক):</label>
+                    <input type="text" id="customer-name" placeholder="অর্ডারের জন্য আপনার নাম লিখুন" required>
+                </div>
+                
+                 <div class="input-group">
+                    <label for="customer-whatsapp"><i class="fa-brands fa-whatsapp"></i> হোয়াটসঅ্যাপ নম্বর (আবশ্যিক):</label>
+                    <input type="tel" id="customer-whatsapp" placeholder="অর্ডারের জন্য আপনার WhatsApp নম্বর দিন" required>
+                     <small style="color: #777; font-size: 11px;">(এই নম্বরে যোগাযোগ করা হবে)</small>
+                 </div>
+                 
+                 <div class="input-group">
+                    <label for="customer-address"><i class="fa-solid fa-map-marker-alt"></i> ডেলিভারি ঠিকানা (আবশ্যিক):</label>
+                    <textarea id="customer-address" placeholder="আপনার সম্পূর্ণ ঠিকানা লিখুন (যেমন: বাসা নং, রোড নং, এলাকা, শহর)" rows="3" required></textarea>
+                    <small class="mandatory">(পণ্য ডেলিভারির জন্য সম্পূর্ণ ঠিকানা আবশ্যক)</small>
+                </div>
+                 
+                 <div class="input-group">
+                    <label for="customer-email"><i class="fa-solid fa-envelope"></i> ইমেইল (ঐচ্ছিক):</label>
+                    <input type="email" id="customer-email" placeholder="অর্ডারের রসিদের জন্য ইমেইল দিন (ঐচ্ছিক)">
+                </div>
+            </section>
+            
+            <section class="delivery-option" style="margin-top: 25px;">
+                <span style="font-size:16px; font-weight:700; color:#16213e; display: block; margin-bottom: 15px;">
+                    <i class="fa-solid fa-truck-fast"></i> ডেলিভারি এলাকা নির্বাচন করুন:
+                </span>
+                
+                <div class="delivery-selector" role="radiogroup" aria-label="Delivery Area Selector">
+                    <button class="delivery-btn selected-delivery" id="delivery-dhaka-btn" data-charge="80" data-area="dhaka" role="radio" aria-checked="true">
+                        <i class="fa-solid fa-city"></i> ঢাকা সিটির মধ্যে (৳৮০)
+                    </button>
+                    <button class="delivery-btn" id="delivery-outside-btn" data-charge="150" data-area="outside" role="radio" aria-checked="false">
+                        <i class="fa-solid fa-globe"></i> ঢাকার বাহিরে (৳১৫০)
+                    </button>
+                </div>
+            </section>
+            <div class="input-group" id="order-code-input-group" style="margin-top: 20px;">
+                <label for="order-code-input"><i class="fa-solid fa-ticket-alt"></i> ডিসকাউন্ট/কুপন কোড (ঐচ্ছিক):</label>
+                <input type="text" id="order-code-input" placeholder="কুপন কোড থাকলে এখানে বসান (যেমন: wood10)">
+            </div>
+
+            <div class="input-group" id="custom-price-input-group" style="display: none; margin-top: 20px;">
+                <label for="custom-price"><i class="fa-solid fa-money-bill-wave"></i> কাস্টম দাম (BDT):</label>
+                <input type="number" id="custom-price" placeholder="আলোচনা করা দামটি বসান (যেমন: ১৫০০)" required>
+                <small style="color: #777; font-size: 11px;">(শুধু কাস্টম অর্ডারের জন্য)</small>
+            </div>
+            
+            <section id="payment-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 20px;">
+                    <span style="font-size:16px; font-weight:700; color:#16213e;">পেমেন্ট মেথড নির্বাচন করুন:</span>
+                    <div class="countdown" role="timer">
+                        <span id="timer">10:00</span>
+                    </div>
+                </div>
+                
+                <div class="method-selector" role="radiogroup" aria-label="Payment Method Selector">
+                    <button class="method-btn selected" id="bkash-btn" data-method="bikash" role="radio" aria-checked="true">
+                        <i class="fa-solid fa-mobile-alt"></i> বিকাশ
+                    </button>
+                    <button class="method-btn" id="nagad-btn" data-method="nagad" role="radio" aria-checked="false">
+                        <i class="fa-solid fa-mobile-alt"></i> নগদ
+                    </button>
+                    <button class="method-btn" id="rocket-btn" data-method="rocket" role="radio" aria-checked="false">
+                        <i class="fa-solid fa-mobile-alt"></i> রকেট
+                    </button>
+                </div>
+                
+                <p class="instruction-text" style="color: #666; margin-bottom: 20px; font-size: 13px;">
+                    নির্বাচিত **<span id="selected-method-text" style="font-weight: bold; color: #e53935;">বিকাশ</span>** নম্বরে **সেন্ড মানি** করুন এবং ট্রানজেকশন আইডি বসান।
+                </p>
+
+                <div class="payment-details">
+                    
+                    <div class="detail-row">
+                        <span class="label"><i class="fa-solid fa-tag" style="color:var(--theme-medium-brown);"></i> পণ্যের আসল মূল্য:</span>
+                        <span class="value" id="original-amount" style="font-size: 16px; color: #555; font-weight: 600;">0.00 BDT</span>
+                    </div>
+
+                    <div class="discount-details">
+                         <div class="discount-row">
+                            <span class="label"><i class="fa-solid fa-percent" style="color:#e53935;"></i> সাইট ডিসকাউন্ট (২০%):</span>
+                            <span class="value" id="site-discount-amount">- 0.00 BDT</span>
+                        </div>
+                        <div class="discount-row coupon-row" id="coupon-discount-row" style="display: none;">
+                            <span class="label"><i class="fa-solid fa-ticket-simple" style="color:#4CAF50;"></i> কুপন ছাড় (<span id="coupon-code-display">wood10</span>):</span>
+                            <span class="value" id="coupon-discount-amount">- 0.00 BDT</span>
+                        </div>
+                    </div>
+                    
+                    <div class="delivery-cost-row">
+                        <span class="label" style="font-weight: 700; color: #16213e;"><i class="fa-solid fa-truck" style="color:#e53935;"></i> ডেলিভারি চার্জ:</span>
+                        <span class="value" id="delivery-charge-amount" style="font-size: 16px; color: #e53935; font-weight: 800;">+ 0.00 BDT</span>
+                    </div>
+                    <div class="detail-row" style="background-color: #e3f2fd; padding: 10px; border-radius: 6px; border-bottom: none;">
+                        <span class="label" style="font-weight: 700; color: #16213e;"><i class="fa-solid fa-receipt" style="color:var(--theme-medium-brown);"></i> মোট পরিশোধ:</span>
+                        <span class="value" id="amount-to-pay" style="font-size: 18px; color: #e53935; font-weight: 800;">0.00 BDT</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="label"><i class="fa-solid fa-mobile-alt" style="color:var(--theme-medium-brown);"></i> সেন্ড মানি নম্বর:</span>
+                        <span class="value">
+                            <span id="cashout-number">01709288934</span> 
+                            <button class="copy-btn" onclick="copyToClipboard('cashout-number')" aria-label="Copy Cashout Number"><i class="fa-solid fa-copy"></i></button>
+                        </span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="transaction-id"><i class="fa-solid fa-key"></i> ট্রানজেকশন আইডি (TxnID) (আবশ্যিক):</label>
+                        <input type="text" id="transaction-id" placeholder="ট্রানজেকশন আইডি বসান (যেমন: 8A7B6C5D4E)" required>
+                         <small class="mandatory">(পেমেন্টের প্রমাণের জন্য আবশ্যক)</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="screenshot-link"><i class="fa-solid fa-camera"></i> স্ক্রিনশট লিংক (ঐচ্ছিক):</label>
+                        <input type="url" id="screenshot-link" placeholder="স্ক্রিনশটের আপলোড লিংক (যেমন: Imgur)">
+                    </div>
+                </div>
+            </section>
+            
+            <button class="submit-btn-payment" onclick="openConfirmationModal()" aria-label="Submit Order">অর্ডার সাবমিট করুন</button>
+            
+            <div class="alert-box" role="note">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <p>অবশ্যই নিশ্চিত করবেন, পেমেন্টটি যেন **সেন্ড মানি** হয়। <span class="important-text">কোনো এজেন্ট পয়েন্টে ক্যাশ আউট করবেন না।</span></p>
+            </div>
+
+        </div>
+    </div>
+    
+    <div id="confirmation-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <h3 id="modal-title"> চূড়ান্ত অর্ডার নিশ্চিতকরণ</h3>
+            
+            <p>পণ্য: <span id="modal-item-name"></span></p>
+            <p>ডেলিভারি এলাকা: <span id="modal-delivery-area"></span></p>
+            <p>নাম: <span id="modal-customer-name"></span></p>
+            <p>হোয়াটসঅ্যাপ: <span id="modal-customer-whatsapp"></span></p>
+            <p id="modal-address-row">ঠিকানা: <span id="modal-customer-address"></span></p>
+            <p id="modal-email-row" style="display:none;">ইমেইল: <span id="modal-customer-email"></span></p>
+            <p id="modal-txn-row">ট্রানজেকশন আইডি: <span id="modal-transaction-id"></span></p>
+            
+            <span class="final-amount">
+                মোট পরিশোধ: <span id="modal-final-amount">0.00 BDT</span>
+            </span>
+            
+            <p style="font-size: 13px; color: #e53935; margin-top: 15px; font-weight: 700;">
+                <i class="fa-solid fa-triangle-exclamation"></i> তথ্য সঠিক থাকলে নিশ্চিত করুন। ভুল ঠিকানা বা তথ্যের জন্য Woodloom দায়ী থাকবে না।
+            </p>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn" id="modal-cancel-btn" onclick="closeModal('confirmation-modal')">বাতিল করুন</button>
+                <button class="modal-btn" id="modal-confirm-btn" onclick="finalizeSubmission()">নিশ্চিত ও সাবমিট করুন</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="success-page" style="display: none;">
+        <div class="success-container" role="status">
+            <span class="success-icon"><i class="fa-solid fa-circle-check"></i></span>
+            <h2>অভিনন্দন! অর্ডার সফল!</h2>
+            
+            <p style="font-weight: bold; color: var(--theme-medium-brown); margin-bottom: 25px;">Woodloom থেকে পণ্য কেনার জন্য ধন্যবাদ আপনাকে।</p>
+            
+            <p>আপনার অর্ডার ট্র্যাকিং নাম্বার:</p>
+            <span class="order-code-display" id="display-order-code">ORD-XXXXXX</span>
+
+            <p>প্রিয় গ্রাহক, আপনার অর্ডার রিকোয়েস্ট **সফলভাবে সাবমিট** করা হয়েছে। দ্রুত ডেলিভারির জন্য অনুগ্রহ করে পরবর্তী ধাপ অনুসরণ করুন:</p>
+            
+            <div class="next-steps">
+                <p><i class="fa-solid fa-paper-plane"></i> পরবর্তী ডেলিভারি ধাপ:</p>
+                <p><i class="fa-solid fa-1"></i> আপনার মোবাইলের **ইমেইল অ্যাপ** (Gmail/Outlook) ওপেন করুন।</p>
+                <p><i class="fa-solid fa-2"></i> আমাদের ঠিকানায় (<a href="mailto:woodloom.orders@gmail.com">woodloom.orders@gmail.com</a>) তৈরি হওয়া বার্তাটি **"Send"** করুন।</p>
+                <p><i class="fa-solid fa-3"></i> ডেলিভারি দ্রুত করতে হোয়াটসঅ্যাপে <span class="important-text">অর্ডার নাম্বার সহ একটি বার্তা</span> পাঠান।</p>
+            </div>
+            
+            <p style="margin-top: 20px; font-weight: bold; color: #e53935;"><i class="fa-solid fa-stopwatch"></i> আপনার অর্ডারটি প্রসেস করে দ্রুততম সময়ের মধ্যে আপনার ঠিকানায় পাঠানো হবে।</p>
+            <button class="help-btn" style="margin-top: 20px; background-color: var(--theme-medium-brown);" onclick="showPage('home-page')"><i class="fa-solid fa-house"></i> হোমপেজে ফিরে যান</button>
+        </div>
+    </div>
+    
+    <div id="guide-page" style="display: none;">
+        <div class="cashier-container" style="max-width: 600px; color: #333; background-color: #ffffff;">
+            <div class="page-header" style="border-bottom: 2px solid var(--theme-medium-brown); padding-bottom: 10px; margin-bottom: 20px;">
+                <i class="fa-solid fa-arrow-left" style="color:#555; cursor: pointer;" onclick="showPage('home-page')"></i>
+                <h2 style="margin-top: 10px; color: var(--theme-dark-brown);">সম্পূর্ণ গাইডলাইন ও FAQ</h2>
+                <p style="font-size: 14px; color: #777;">অর্ডার করার পূর্বে বিস্তারিত তথ্য জেনে নিন।</p>
+            </div>
+
+            <h3 style="color: #16213e; margin-top: 25px; border-left: 4px solid var(--theme-medium-brown); padding-left: 10px; margin-bottom: 15px;"><i class="fa-solid fa-cogs"></i> ১. অর্ডার প্রক্রিয়া</h3>
+            <ol style="font-size: 15px; padding-left: 20px;">
+                <li style="margin-bottom: 10px;">হোমপেজ থেকে আপনার পছন্দের পণ্যটি নির্বাচন করুন।</li>
+                <li style="margin-bottom: 10px;"><strong style="color: var(--theme-accent-red);">ডেলিভারি এলাকা নির্বাচন করুন।</strong></li>
+                <li style="margin-bottom: 10px;">আপনার নাম, **হোয়াটসঅ্যাপ নম্বর** এবং **সম্পূর্ণ ডেলিভারি ঠিকানা** পূরণ করুন।</li>
+                <li style="margin-bottom: 10px;">বিকাশ/নগদ/রকেট নির্বাচন করে `01709288934` নম্বরে **সেন্ড মানি** করুন।</li>
+                <li style="margin-bottom: 10px;">প্রাপ্ত **ট্রানজেকশন আইডি (TxnID)** ইনপুট ফিল্ডে বসান।</li>
+                <li style="margin-bottom: 10px;">"অর্ডার সাবমিট করুন" বাটনে ক্লিক করে ইমেইলটি আমাদের ঠিকানায় **পাঠিয়ে দিন**।</li>
+                 <li style="margin-bottom: 10px; font-weight: 700; color: #e53935;"><i class="fa-solid fa-exclamation-triangle"></i> কুপন কোড ব্যবহার করলে অবশ্যই মূল্য পরিশোধের আগে তা বসিয়ে দিবেন।</li>
+            </ol>
+
+            <h3 style="color: #16213e; margin-top: 30px; border-left: 4px solid var(--theme-accent-red); padding-left: 10px; margin-bottom: 15px;"><i class="fa-solid fa-exclamation-circle"></i> ২. গুরুত্বপূর্ণ নির্দেশিকা</h3>
+            <ul style="font-size: 15px; padding-left: 20px; list-style-type: '👉 ';">
+                <li style="margin-bottom: 10px;">**পেমেন্ট নম্বর:** আমাদের একমাত্র সেন্ড মানি নম্বর হলো **01709288934** (বিকাশ, নগদ, রকেট)।</li>
+                <li style="margin-bottom: 10px;">**সতর্কতা:** অবশ্যই **সেন্ড মানি** করুন। কোনো এজেন্ট পয়েন্টে **ক্যাশ আউট করবেন না**।</li>
+                <li style="margin-bottom: 10px;">**ডেলিভারি সময়:** ঢাকার মধ্যে সাধারণত ৪৮-৭২ ঘণ্টা এবং ঢাকার বাইরে ৩-৫ কার্যদিবস সময় লাগতে পারে।</li>
+                 <li style="margin-bottom: 10px;">**রিফান্ড পলিসি:** ভুল ঠিকানা দিলে পণ্য ডেলিভারি না হলে Woodloom দায়ী থাকবে না। পণ্য ভাঙ্গা বা নষ্ট পেলে অবশ্যই ডেলিভারি ম্যানের সামনে ভিডিও করে আমাদের জানাতে হবে।</li>
+            </ul>
+            
+            <h3 style="color: #16213e; margin-top: 30px; border-left: 4px solid var(--theme-accent-green); padding-left: 10px; margin-bottom: 15px;"><i class="fa-solid fa-headset"></i> ৩. সাহায্য ও যোগাযোগ</h3>
+            <p style="font-size: 15px;">অর্ডার বা পণ্য সংক্রান্ত যেকোনো তথ্যের জন্য সরাসরি আমাদের হোয়াটসঅ্যাপ নম্বরে যোগাযোগ করুন।</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="https://wa.me/8801709288934" target="_blank" class="help-btn" style="background-color: #25D366; color: white; border: none; padding: 10px 18px; border-radius: 30px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                    <i class="fa-brands fa-whatsapp"></i> হোয়াটসঅ্যাপ সাপোর্ট
+                </a>
+            </div>
+
+        </div>
+    </div>
+    
+    <footer class="bottom-nav" role="navigation" aria-label="Bottom Navigation">
+        <a href="#" class="nav-item active" onclick="showPage('home-page'); return false;">
+            <i class="fa-solid fa-house"></i> হোম
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('guide-page'); return false;">
+            <i class="fa-solid fa-book"></i> গাইড
+        </a>
+        <a href="https://wa.me/8801709288934" target="_blank" class="nav-item">
+            <i class="fa-solid fa-headset"></i> যোগাযোগ
+        </a>
+    </footer>
+
+    <script>
+        // **************************************************
+        // [ WOODLOOM - JavaScript কনফিগারেশন ]
+        // **************************************************
+        const recipientEmail = "woodloom.orders@gmail.com"; 
+        const specificNumber = '01709288934'; 
+        const cashoutNumbers = { bikash: specificNumber, nagad: specificNumber, rocket: specificNumber };
+        
+        // ** ডিসকাউন্ট রেট **
+        const GLOBAL_DISCOUNT_PERCENT = 0.20; // 20% ছাড়
+        
+        // ** কুপন কোড সেটিংস **
+        const VALID_COUPON_CODE = 'wood10'; // উদাহরণ কুপন
+        const COUPON_DISCOUNT_AMOUNT = 30.00; // 30 টাকা ছাড়
+        
+        // গ্লোবাল ভেরিয়েবল
+        let selectedMethod = 'bikash';
+        let currentOriginalAmount = 0; 
+        let currentFinalAmount = 0;    
+        let currentItemName = '';
+        let isCustomAccountOrder = false; 
+        let lastGeneratedOrderNumber = '';
+        let currentSiteDiscountAmount = 0; 
+        let appliedCouponDiscount = 0; 
+        let timerInterval; 
+
+        // ডেলিভারি চার্জ ভেরিয়েবল
+        let currentDeliveryCharge = 80; // ডিফল্ট: ঢাকা
+        let selectedDeliveryArea = 'dhaka'; 
+
+        // == ১. মডাল ও পপআপ ফাংশন ==
+
+        // কনফার্মেশন মডাল খোলা (ভ্যালিডেশন সহ)
+        function openConfirmationModal() {
+             // গ্রাহকের তথ্য
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerWhatsapp = document.getElementById('customer-whatsapp').value.trim(); 
+            const customerAddress = document.getElementById('customer-address').value.trim(); 
+            const customerEmail = document.getElementById('customer-email').value.trim();
+            const transactionId = document.getElementById('transaction-id').value.trim();
+            const customPriceValue = document.getElementById('custom-price').value.trim();
+
+            // আবশ্যিক ভ্যালিডেশন 
+            if (!customerName || !customerWhatsapp || customerWhatsapp.length < 10) {
+                alert("অর্ডার সাবমিট করার জন্য আপনার নাম এবং একটি বৈধ হোয়াটসঅ্যাপ নম্বর প্রদান করা আবশ্যক।");
+                return;
+            }
+            
+            // ঠিকানা ভ্যালিডেশন
+             if (!customerAddress || customerAddress.length < 10) {
+                alert("পণ্য ডেলিভারির জন্য আপনার সম্পূর্ণ ঠিকানা প্রদান করা আবশ্যক।");
+                document.getElementById('customer-address').focus();
+                return;
+            }
+            
+            if (isCustomAccountOrder) {
+                if (!customPriceValue || isNaN(parseFloat(customPriceValue)) || parseFloat(customPriceValue) <= 0) {
+                    alert("কাস্টম অর্ডারের জন্য একটি বৈধ দাম বসান।");
+                    document.getElementById('custom-price').focus();
+                    return;
+                }
+                const originalPrice = parseFloat(customPriceValue);
+                calculateAndDisplayAmount(originalPrice); 
+            }
+            
+            // ট্রানজেকশন আইডি ভ্যালিডেশন
+            if (!transactionId || transactionId.length < 8) {
+                alert("দয়াকরে একটি সঠিক ট্রানজেকশন আইডি বসান।");
+                document.getElementById('transaction-id').focus();
+                return;
+            }
+            
+            // মডাল ডেটা আপডেট
+            document.getElementById('modal-item-name').innerText = currentItemName;
+            document.getElementById('modal-customer-name').innerText = customerName;
+            document.getElementById('modal-customer-whatsapp').innerText = customerWhatsapp;
+            document.getElementById('modal-customer-address').innerText = customerAddress; 
+            document.getElementById('modal-final-amount').innerText = currentFinalAmount.toFixed(2).toLocaleString('bn-BD') + ' BDT';
+            
+            // ডেলিভারি এরিয়া
+            const deliveryAreaText = (selectedDeliveryArea === 'dhaka') ? 'ঢাকা সিটির মধ্যে' : 'ঢাকার বাহিরে';
+            document.getElementById('modal-delivery-area').innerText = `${deliveryAreaText} (৳${currentDeliveryCharge})`;
+            
+            // ইমেইল row
+            if (customerEmail) {
+                document.getElementById('modal-email-row').style.display = 'block';
+                document.getElementById('modal-customer-email').innerText = customerEmail;
+            } else {
+                 document.getElementById('modal-email-row').style.display = 'none';
+            }
+            
+            // Transaction ID
+            document.getElementById('modal-txn-row').style.display = 'block';
+            document.getElementById('modal-transaction-id').innerText = transactionId;
+            
+            // মডাল প্রদর্শন
+            document.getElementById('confirmation-modal').style.display = 'block';
+        }
+        
+        // মডাল বন্ধ করার ফাংশন
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // চূড়ান্ত সাবমিশন ফাংশন
+        function finalizeSubmission() {
+            closeModal('confirmation-modal');
+            submitPayment(); 
+        }
+
+        // হেডার ড্রপডাউন মেনু টগল
+        function toggleDropdown() {
+            document.getElementById('header-dropdown').classList.toggle('show');
+        }
+        window.onclick = function(event) {
+            if (!event.target.matches('.dot-menu-btn') && !event.target.matches('.dot-menu-btn i')) {
+                const dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        // == ২. পেমেন্ট ও অর্ডার প্রসেস ফাংশন ==
+
+        // অর্ডার সাবমিট (ইমেইল তৈরি)
+        function submitPayment() {
+            // গ্রাহকের তথ্য
+            const customerName = document.getElementById('customer-name').value.trim();
+            const customerWhatsapp = document.getElementById('customer-whatsapp').value.trim(); 
+            const customerAddress = document.getElementById('customer-address').value.trim(); 
+            const customerEmail = document.getElementById('customer-email').value.trim() || 'প্রদান করা হয়নি (ঐচ্ছিক)';
+            const orderCodeInput = document.getElementById('order-code-input').value.trim() || 'প্রদান করা হয়নি (ঐচ্ছিক)';
+            
+            // পেমেন্ট তথ্য
+            const transactionId = document.getElementById('transaction-id').value.trim();
+            const screenshotLink = document.getElementById('screenshot-link').value.trim() || 'প্রদান করা হয়নি (ঐচ্ছিক)';
+            const methodText = document.getElementById('selected-method-text').innerText;
+            const customPriceValue = document.getElementById('custom-price').value.trim();
+
+             if (isCustomAccountOrder) {
+                currentItemName = `Custom Woodloom Order: ${parseFloat(customPriceValue).toFixed(2)} BDT`;
+             }
+            
+            lastGeneratedOrderNumber = generateOrderNumber();
+            document.getElementById('display-order-code').innerText = lastGeneratedOrderNumber;
+            
+            const deliveryAreaText = (selectedDeliveryArea === 'dhaka') ? 'ঢাকা সিটির মধ্যে' : 'ঢাকার বাহিরে';
+
+            // ইমেইল বডি টেক্সট
+            let paymentDetails = `পেমেন্ট মেথড: ${methodText} (সেন্ড মানি)
+আসল মূল্য: ${currentOriginalAmount.toFixed(2)} টাকা
+সাইট ডিসকাউন্ট: -${currentSiteDiscountAmount.toFixed(2)} টাকা (২০%)
+কুপন ছাড় (${appliedCouponDiscount > 0 ? orderCodeInput : 'প্রয়োজন নেই'}): -${appliedCouponDiscount.toFixed(2)} টাকা
+ডেলিভারি চার্জ (${deliveryAreaText}): +${currentDeliveryCharge.toFixed(2)} টাকা
+মোট পরিশোধ: ${currentFinalAmount.toFixed(2)} টাকা
+ট্রানজেকশন আইডি: ${transactionId}
+স্ক্রিনশট লিংক: ${screenshotLink} `;
+            
+            const emailBody = `
+Woodloom: নতুন অর্ডার রিকোয়েস্ট!
+
+-----------------------------------
+অর্ডার নাম্বার: ${lastGeneratedOrderNumber}
+গ্রাহকের নাম: ${customerName}
+হোয়াটসঅ্যাপ নম্বর: ${customerWhatsapp}
+ডেলিভারি ঠিকানা: ${customerAddress}
+ইমেইল: ${customerEmail}
+ডিসকাউন্ট/কুপন কোড (ইনপুট): ${orderCodeInput}
+-----------------------------------
+পণ্য: ${currentItemName}
+${paymentDetails}
+
+দয়া করে অর্ডারটি দ্রুত প্রসেস করুন।
+`;
+            
+            const subject = encodeURIComponent(`Woodloom অর্ডার: ${customerName} - ${currentItemName} (মোট: ${currentFinalAmount.toFixed(2)} BDT) - অর্ডার নং: ${lastGeneratedOrderNumber}`);
+            const body = encodeURIComponent(emailBody);
+            
+            const mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+            
+            window.open(mailtoURL, '_blank');
+            
+            showPage('success-page'); 
+            
+            // ফরম রিসেট 
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-whatsapp').value = '';
+            document.getElementById('customer-address').value = '';
+            document.getElementById('customer-email').value = '';
+            document.getElementById('transaction-id').value = '';
+            document.getElementById('screenshot-link').value = '';
+            document.getElementById('custom-price').value = '';
+            document.getElementById('order-code-input').value = ''; 
+            currentOriginalAmount = 0;
+            currentFinalAmount = 0;
+            currentSiteDiscountAmount = 0;
+            appliedCouponDiscount = 0; 
+            currentItemName = '';
+            isCustomAccountOrder = false;
+        }
+
+        // ডিসকাউন্ট ও মূল্য গণনা (ডেলিভারি চার্জ সহ)
+        function calculateAndDisplayAmount(originalPrice) {
+            currentOriginalAmount = originalPrice;
+            
+            const couponCode = document.getElementById('order-code-input').value.trim();
+            document.querySelector('.discount-details').style.display = 'block';
+            
+            // ১. সাইট ডিসকাউন্ট (২০%) গণনা
+            currentSiteDiscountAmount = currentOriginalAmount * GLOBAL_DISCOUNT_PERCENT;
+            
+            // ২. কুপন ডিসকাউন্ট গণনা
+            if (couponCode.toLowerCase() === VALID_COUPON_CODE.toLowerCase() && currentOriginalAmount >= COUPON_DISCOUNT_AMOUNT) {
+                appliedCouponDiscount = COUPON_DISCOUNT_AMOUNT;
+                document.getElementById('coupon-code-display').innerText = couponCode;
+                document.getElementById('coupon-discount-amount').innerText = `- ${appliedCouponDiscount.toFixed(2).toLocaleString('bn-BD')} BDT`;
+                document.getElementById('coupon-discount-row').style.display = 'flex';
+            } else {
+                appliedCouponDiscount = 0;
+                document.getElementById('coupon-discount-row').style.display = 'none'; 
+            }
+            
+            // ৩. মোট ডিসকাউন্ট ও নেট মূল্য (ডিসকাউন্ট পর)
+            const totalDiscount = currentSiteDiscountAmount + appliedCouponDiscount;
+            let netAmount = currentOriginalAmount - totalDiscount;
+            
+            // ৪. ডেলিভারি চার্জ যোগ
+            currentFinalAmount = netAmount + currentDeliveryCharge;
+            
+            // পেমেন্ট পেজে ডিসপ্লে আপডেট করা
+            document.getElementById('original-amount').innerText = currentOriginalAmount.toFixed(2).toLocaleString('bn-BD') + ' BDT';
+            document.getElementById('site-discount-amount').innerText = `- ${currentSiteDiscountAmount.toFixed(2).toLocaleString('bn-BD')} BDT`;
+            document.getElementById('delivery-charge-amount').innerText = `+ ${currentDeliveryCharge.toFixed(2).toLocaleString('bn-BD')} BDT`; 
+            document.getElementById('amount-to-pay').innerText = currentFinalAmount.toFixed(2).toLocaleString('bn-BD') + ' BDT';
+        }
+
+        // কুপন কোড পরিবর্তন হলে দাম আপডেট
+        document.getElementById('order-code-input').addEventListener('input', (e) => {
+            if (isCustomAccountOrder) {
+                const originalPrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                calculateAndDisplayAmount(originalPrice);
+            } 
+            else if (currentItemName) {
+                 calculateAndDisplayAmount(currentOriginalAmount);
+            }
+        });
+
+        // কাস্টম প্রাইস ইনপুট পরিবর্তন হলে দাম আপডেট
+        document.getElementById('custom-price').addEventListener('input', (e) => {
+            const originalPrice = parseFloat(e.target.value) || 0;
+            calculateAndDisplayAmount(originalPrice);
+        });
+
+        // কাস্টম অর্ডার শুরু করা
+        function startCustomAccountOrder() {
+            currentItemName = "Custom Woodloom Order";
+            currentOriginalAmount = 0;
+            isCustomAccountOrder = true;
+            
+            document.getElementById('current-item-display').innerText = "কাস্টম অর্ডার পেমেন্ট";
+            
+            document.getElementById('custom-price-input-group').style.display = 'block';
+            document.getElementById('custom-price').value = '';
+            document.getElementById('custom-price').focus();
+            
+            calculateAndDisplayAmount(0); 
+            showPage('payment-page');
+        }
+        
+        // == ৩. নেভিগেশন ও পেজ কন্ট্রোল ==
+
+        // পেজ পরিবর্তন ফাংশন
+        function showPage(pageId) {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('payment-page').style.display = 'none';
+            document.getElementById('guide-page').style.display = 'none';
+            document.getElementById('success-page').style.display = 'none'; 
+            
+            document.getElementById(pageId).style.display = 'block';
+            window.scrollTo(0, 0); // পেজের উপরে স্ক্রল
+            
+            if (pageId === 'home-page') {
+                document.getElementById('custom-price-input-group').style.display = 'none'; 
+            }
+            
+            if (pageId === 'payment-page') {
+                if (isCustomAccountOrder) {
+                    document.getElementById('custom-price-input-group').style.display = 'block';
+                } else {
+                    document.getElementById('custom-price-input-group').style.display = 'none';
+                }
+                startTimer();
+                window.location.hash = '#payment-page'; 
+                // ডেলিভারি চার্জ ডিসপ্লে নিশ্চিত করা
+                document.getElementById('delivery-charge-amount').innerText = `+ ${currentDeliveryCharge.toFixed(2).toLocaleString('bn-BD')} BDT`;
+            } else {
+                 window.location.hash = ''; 
+            }
+
+            // নেভিগেশন আইটেমগুলি আপডেট
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (pageId === 'home-page') {
+                document.querySelector('.bottom-nav a:nth-child(1)').classList.add('active'); // হোম
+            } else if (pageId === 'guide-page') {
+                 document.querySelector('.bottom-nav a:nth-child(2)').classList.add('active'); // গাইড
+            }
+        }
+
+        // সাধারণ পণ্য কার্ডে ক্লিক
+        document.querySelectorAll('.product-card:not(.custom-order-card)').forEach(card => {
+            card.addEventListener('click', () => {
+                isCustomAccountOrder = false;
+                currentItemName = card.getAttribute('data-item');
+                const originalPrice = parseFloat(card.getAttribute('data-price')) || 0;
+                
+                document.getElementById('current-item-display').innerText = currentItemName;
+                document.getElementById('custom-price-input-group').style.display = 'none';
+                
+                calculateAndDisplayAmount(originalPrice);
+                showPage('payment-page');
+            });
+        });
+        
+        // কাস্টম অর্ডার কার্ডে ক্লিক
+        document.querySelector('.custom-order-card').addEventListener('click', () => {
+            startCustomAccountOrder();
+        });
+        
+        // পেমেন্ট মেথড পরিবর্তন
+        document.querySelectorAll('.method-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelector('.method-btn.selected').classList.remove('selected');
+                button.classList.add('selected');
+                
+                selectedMethod = button.getAttribute('data-method');
+                document.getElementById('cashout-number').innerText = cashoutNumbers[selectedMethod];
+                
+                let methodText = (selectedMethod === 'bikash') ? 'বিকাশ' : (selectedMethod === 'nagad') ? 'নগদ' : 'রকেট';
+                document.getElementById('selected-method-text').innerText = methodText;
+                 copyToClipboard('cashout-number');
+            });
+        });
+
+        // ডেলিভারি বাটন লজিক
+        document.querySelectorAll('.delivery-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // পুরানো সিলেক্টেড বাটন থেকে ক্লাস সরাও
+                document.querySelector('.delivery-btn.selected-delivery').classList.remove('selected-delivery');
+                // নতুন বাটনে ক্লাস যোগ করো
+                button.classList.add('selected-delivery');
+                
+                // গ্লোবাল ভেরিয়েবল আপডেট
+                currentDeliveryCharge = parseFloat(button.getAttribute('data-charge'));
+                selectedDeliveryArea = button.getAttribute('data-area');
+
+                // মোট মূল্য পুনরায় গণনা ও ডিসপ্লে
+                if (currentOriginalAmount > 0 || isCustomAccountOrder) {
+                    let basePrice = currentOriginalAmount;
+                    if (isCustomAccountOrder) {
+                        basePrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                    }
+                    calculateAndDisplayAmount(basePrice);
+                } else {
+                    // কোনো পণ্য নির্বাচিত না থাকলে শুধু ডেলিভারি চার্জ আপডেট করো
+                    document.getElementById('delivery-charge-amount').innerText = `+ ${currentDeliveryCharge.toFixed(2).toLocaleString('bn-BD')} BDT`;
+                }
+            });
+        });
+
+        // == ৪. ইউটিলিটি ফাংশন ==
+
+        // কপি করার ফাংশন 
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(copyText).then(() => {
+                alert(`নম্বরটি কপি হয়েছে: ${copyText}`);
+            }).catch(err => {
+                 console.error('কপি করা যায়নি: ', err);
+            });
+        }
+        
+        // অর্ডার নাম্বার জেনারেটর
+        function generateOrderNumber() {
+            const randomNum = Math.floor(100000 + Math.random() * 900000); 
+            return `WLM-${randomNum}`; 
+        }
+        
+        // কাউন্টডাউন টাইমার (১০ মিনিট)
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            let timeInSeconds = 600; 
+
+            function updateTimer() {
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                const timerDisplay = document.getElementById('timer');
+
+                if (timerDisplay) {
+                    timerDisplay.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+
+                if (timeInSeconds > 0) {
+                    timeInSeconds--;
+                } else {
+                    clearInterval(timerInterval);
+                    if (timerDisplay) timerDisplay.innerText = "সময় শেষ";
+                    const submitBtn = document.querySelector('.submit-btn-payment');
+                    if (submitBtn) submitBtn.disabled = true;
+                }
+            }
+            
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer(); 
+        }
+        
+        // == ৫. পেজ লোড লজিক ==
+        
+        function initializePage() {
+            // ডিফল্ট ঢাকা ডেলিভারি চার্জ নিশ্চিত করা
+            currentDeliveryCharge = 80;
+            selectedDeliveryArea = 'dhaka';
+            showPage('home-page');
+        }
+
+        window.addEventListener('load', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+                document.body.classList.add('loaded'); 
+                initializePage(); 
+            }, 1500); // ১.৫ সেকেন্ড লোডার
+        });
+    </script>
+</body>
+  </html>
