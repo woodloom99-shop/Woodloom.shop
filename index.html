@@ -657,7 +657,7 @@
             
             <section class="product-grid" aria-label="Available Products">
                 
-                <article class="product-card" data-item="কাঠের টিস্যু বক্স" data-price="599" data-original-price="749">
+                <article class="product-card" data-item="কাঠের টিস্যু বক্স" data-price="748.75" data-original-price="599">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" alt="কাঠের টিস্যু বক্স">
                     </div>
@@ -665,7 +665,7 @@
                     <p class="card-price"><span class="original-price">৳৭৪৯</span> ৳৫৯৯</p>
                 </article>
 
-                <article class="product-card" data-item="৩-ড্রয়ার মেডিসিন বক্স" data-price="750" data-original-price="938">
+                <article class="product-card" data-item="৩-ড্রয়ার মেডিসিন বক্স" data-price="937.5" data-original-price="750">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/PqzHJHZk/IMG-20251109-WA0006.jpg" alt="মেডিসিন বক্স">
                     </div>
@@ -673,7 +673,7 @@
                     <p class="card-price"><span class="original-price">৳৯৩৮</span> ৳৭৫০</p>
                 </article>
 
-                <article class="product-card" data-item="নকশা করা জুয়েলারি বক্স" data-price="700" data-original-price="875">
+                <article class="product-card" data-item="নকশা করা জুয়েলারি বক্স" data-price="875" data-original-price="700">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/59Zfssxz/IMG-20251109-WA0013.jpg" alt="জুয়েলারি বক্স">
                     </div>
@@ -681,7 +681,7 @@
                     <p class="card-price"><span class="original-price">৳৮৭৫</span> ৳৭০০</p>
                 </article>
                 
-                <article class="product-card" data-item="১ লক্ষ টাকা সেভিং বক্স" data-price="650" data-original-price="813">
+                <article class="product-card" data-item="১ লক্ষ টাকা সেভিং বক্স" data-price="812.5" data-original-price="650">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/BQcR2ptq/IMG-20251109-WA0002.jpg" alt="সেভিং বক্স">
                     </div>
@@ -689,7 +689,7 @@
                     <p class="card-price"><span class="original-price">৳৮১৩</span> ৳৬৫০</p>
                 </article>
                 
-                <article class="product-card" data-item="মেডিসিন বক্স প্রিমিয়াম" data-price="750" data-original-price="938">
+                <article class="product-card" data-item="মেডিসিন বক্স প্রিমিয়াম" data-price="937.5" data-original-price="750">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/rFf3hJ26/IMG-20251109-WA0008.jpg" alt="মেডিসিন বক্স প্রিমিয়াম">
                     </div>
@@ -697,14 +697,15 @@
                     <p class="card-price"><span class="original-price">৳৯৩৮</span> ৳৭৫০</p>
                 </article>
                 
-                <article class="product-card" data-item="মেডিসিন বক্স লাইট" data-price="590" data-original-price="738">
+                <article class="product-card" data-item="মেডিসিন বক্স লাইট" data-price="737.5" data-original-price="590">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/13QhTKvj/IMG-20251109-WA0015.jpg" alt="মেডিসিন বক্স লাইট">
                     </div>
                     <div class="card-title">মেডিসিন বক্স লাইট</div>
                     <p class="card-price"><span class="original-price">৳৭৩৮</span> ৳৫৯০</p>
                 </article>
-                <article class="product-card" data-item="জুয়েলারি বক্স S2" data-price="700" data-original-price="875">
+                
+                <article class="product-card" data-item="জুয়েলারি বক্স S2" data-price="875" data-original-price="700">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/8cfjCVfD/IMG-20251109-WA0005.jpg" alt="জুয়েলারি বক্স S2">
                     </div>
@@ -712,7 +713,7 @@
                     <p class="card-price"><span class="original-price">৳৮৭৫</span> ৳৭০০</p>
                 </article>
 
-                <article class="product-card" data-item="কলমদানি প্রিমিয়াম" data-price="550" data-original-price="688">
+                <article class="product-card" data-item="কলমদানি প্রিমিয়াম" data-price="687.5" data-original-price="550">
                     <div class="card-image">
                         <img src="https://i.postimg.cc/PrZQ6gVJ/IMG-20251109-WA0019.jpg" alt="কলমদানি প্রিমিয়াম">
                     </div>
@@ -1023,8 +1024,8 @@
         
         // গ্লোবাল ভেরিয়েবল
         let selectedMethod = 'bikash'; // ডিফল্ট: বিকাশ
-        let currentOriginalAmount = 0; 
-        let currentFinalAmount = 0;    
+        let currentOriginalAmount = 0; // এটা এখন বর্ধিত দাম (data-price)
+        let currentFinalAmount = 0;    // এটা এখন ডিসকাউন্ট পরবর্তী দাম (data-original-price)
         let currentItemName = '';
         let isCustomAccountOrder = false; 
         let lastGeneratedOrderNumber = '';
@@ -1067,7 +1068,7 @@
                     document.getElementById('custom-price').focus();
                     return;
                 }
-                const originalPrice = parseFloat(customPriceValue);
+                const originalPrice = parseFloat(customPriceValue) / (1 - GLOBAL_DISCOUNT_PERCENT); // কাস্টম দামের ওপর ২০% যোগ করে বর্ধিত দাম
                 calculateAndDisplayAmount(originalPrice); 
             }
             
@@ -1160,6 +1161,7 @@
             const customPriceValue = document.getElementById('custom-price').value.trim();
 
              if (isCustomAccountOrder) {
+                // কাস্টম অর্ডারের ক্ষেত্রে কাঙ্ক্ষিত দামটিই পণ্যের নাম হিসাবে দেখাবে
                 currentItemName = `Custom Woodloom Order: ${parseFloat(customPriceValue).toFixed(2)} BDT`;
              }
             
@@ -1167,33 +1169,16 @@
             document.getElementById('display-order-code').innerText = lastGeneratedOrderNumber;
             
             const deliveryAreaText = (selectedDeliveryArea === 'dhaka') ? 'ঢাকা সিটির মধ্যে' : 'ঢাকার বাহিরে';
-
-            // ইমেইল বডি টেক্সট
+            
+            // ইমেইল বডি টেক্সট - এখানে currentOriginalAmount মানে বর্ধিত দাম এবং currentFinalAmount মানে ডিসকাউন্ট পরবর্তী কাঙ্ক্ষিত দাম
             let paymentDetails = `পেমেন্ট মেথড: ${methodText}
-আসল মূল্য: ${currentOriginalAmount.toFixed(2)} টাকা
+আসল মূল্য: ${currentOriginalAmount.toFixed(2)} টাকা (২০% ডিসকাউন্টের পূর্বে)
 সাইট ডিসকাউন্ট: -${currentSiteDiscountAmount.toFixed(2)} টাকা (২০%)
 কুপন ছাড় (${appliedCouponDiscount > 0 ? orderCodeInput : 'প্রয়োজন নেই'}): -${appliedCouponDiscount.toFixed(2)} টাকা
 ডেলিভারি চার্জ (${deliveryAreaText}): +${currentDeliveryCharge.toFixed(2)} টাকা
 মোট পরিশোধ: ${currentFinalAmount.toFixed(2)} টাকা
 ট্রানজেকশন আইডি: ${transactionId}
 স্ক্রিনশট লিংক: ${screenshotLink} `;
-            
-            const emailBody = `
-Woodloom: নতুন অর্ডার রিকোয়েস্ট!
-
------------------------------------
-অর্ডার নাম্বার: ${lastGeneratedOrderNumber}
-গ্রাহকের নাম: ${customerName}
-হোয়াটসঅ্যাপ নম্বর: ${customerWhatsapp}
-ডেলিভারি ঠিকানা: ${customerAddress}
-ইমেইল: ${customerEmail}
-ডিসকাউন্ট/কুপন কোড (ইনপুট): ${orderCodeInput}
------------------------------------
-পণ্য: ${currentItemName}
-${paymentDetails}
-
-দয়া করে অর্ডারটি দ্রুত প্রসেস করুন।
-`;
             
             const subject = encodeURIComponent(`Woodloom অর্ডার: ${customerName} - ${currentItemName} (মোট: ${currentFinalAmount.toFixed(2)} BDT) - অর্ডার নং: ${lastGeneratedOrderNumber}`);
             const body = encodeURIComponent(emailBody);
@@ -1222,8 +1207,8 @@ ${paymentDetails}
         }
 
         // ডিসকাউন্ট ও মূল্য গণনা (ডেলিভারি চার্জ সহ)
-        function calculateAndDisplayAmount(originalPrice) {
-            currentOriginalAmount = originalPrice;
+        function calculateAndDisplayAmount(extendedPrice) {
+            currentOriginalAmount = extendedPrice; // বর্ধিত দাম (যেখান থেকে ২০% ডিসকাউন্ট হবে)
             
             const couponCode = document.getElementById('order-code-input').value.trim();
             document.querySelector('.discount-details').style.display = 'block';
@@ -1231,9 +1216,10 @@ ${paymentDetails}
             // ১. সাইট ডিসকাউন্ট (২০%) গণনা
             currentSiteDiscountAmount = currentOriginalAmount * GLOBAL_DISCOUNT_PERCENT;
             
-            // ২. কুপন ডিসকাউন্ট গণনা
-            // কুপন ডিসকাউন্ট শুধুমাত্র পণ্যের মূল্যের উপর (সাইট ডিসকাউন্টের পর) প্রযোজ্য হবে এবং COD বা অনলাইন সবক্ষেত্রেই প্রযোজ্য
-            if (couponCode.toLowerCase() === VALID_COUPON_CODE.toLowerCase() && (currentOriginalAmount - currentSiteDiscountAmount) >= COUPON_DISCOUNT_AMOUNT) {
+            // ২. কুপন ডিসকাউন্ট গণনা (সাইট ডিসকাউন্ট এর পর)
+            const priceAfterSiteDiscount = currentOriginalAmount - currentSiteDiscountAmount;
+
+            if (couponCode.toLowerCase() === VALID_COUPON_CODE.toLowerCase() && priceAfterSiteDiscount >= COUPON_DISCOUNT_AMOUNT) {
                 appliedCouponDiscount = COUPON_DISCOUNT_AMOUNT;
                 document.getElementById('coupon-code-display').innerText = couponCode;
                 document.getElementById('coupon-discount-amount').innerText = `- ${appliedCouponDiscount.toFixed(2).toLocaleString('bn-BD')} BDT`;
@@ -1259,9 +1245,10 @@ ${paymentDetails}
 
         // কুপন কোড পরিবর্তন হলে দাম আপডেট
         document.getElementById('order-code-input').addEventListener('input', () => {
-            let basePrice = currentOriginalAmount;
+            let basePrice = currentOriginalAmount; 
             if (isCustomAccountOrder) {
-                basePrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                const finalDesiredPrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                basePrice = finalDesiredPrice / (1 - GLOBAL_DISCOUNT_PERCENT); // বর্ধিত দাম
             } 
             if (basePrice > 0) {
                  calculateAndDisplayAmount(basePrice);
@@ -1270,8 +1257,9 @@ ${paymentDetails}
 
         // কাস্টম প্রাইস ইনপুট পরিবর্তন হলে দাম আপডেট
         document.getElementById('custom-price').addEventListener('input', (e) => {
-            const originalPrice = parseFloat(e.target.value) || 0;
-            calculateAndDisplayAmount(originalPrice);
+            const finalDesiredPrice = parseFloat(e.target.value) || 0;
+            const extendedPrice = finalDesiredPrice / (1 - GLOBAL_DISCOUNT_PERCENT);
+            calculateAndDisplayAmount(extendedPrice);
         });
 
         // কাস্টম অর্ডার শুরু করা
@@ -1364,12 +1352,13 @@ ${paymentDetails}
             card.addEventListener('click', () => {
                 isCustomAccountOrder = false;
                 currentItemName = card.getAttribute('data-item');
-                const originalPrice = parseFloat(card.getAttribute('data-price')) || 0;
+                // data-price থেকে বর্ধিত মূল্য নেওয়া হচ্ছে
+                const extendedPrice = parseFloat(card.getAttribute('data-price')) || 0; 
                 
                 document.getElementById('current-item-display').innerText = currentItemName;
                 document.getElementById('custom-price-input-group').style.display = 'none';
                 
-                calculateAndDisplayAmount(originalPrice);
+                calculateAndDisplayAmount(extendedPrice);
                 showPage('payment-page');
             });
         });
@@ -1408,16 +1397,28 @@ ${paymentDetails}
                 selectedDeliveryArea = button.getAttribute('data-area');
 
                 // মোট মূল্য পুনরায় গণনা ও ডিসপ্লে
-                let basePrice = currentOriginalAmount;
+                let basePrice = currentOriginalAmount; 
                 if (isCustomAccountOrder) {
-                    basePrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                    const finalDesiredPrice = parseFloat(document.getElementById('custom-price').value) || 0;
+                    basePrice = finalDesiredPrice / (1 - GLOBAL_DISCOUNT_PERCENT);
                 }
+                
                 if (basePrice > 0) {
                     calculateAndDisplayAmount(basePrice);
                 } else {
                     // কোনো পণ্য নির্বাচিত না থাকলে শুধু ডেলিভারি চার্জ আপডেট করো
                     document.getElementById('delivery-charge-amount').innerText = `+ ${currentDeliveryCharge.toFixed(2).toLocaleString('bn-BD')} BDT`;
-                    document.getElementById('amount-to-pay').innerText = currentDeliveryCharge.toFixed(2).toLocaleString('bn-BD') + ' BDT';
+                    // শুধুমাত্র ডেলিভারি চার্জ দেখাও
+                    const originalPriceValue = parseFloat(document.getElementById('original-amount').innerText) || 0;
+                    const siteDiscountValue = parseFloat(document.getElementById('site-discount-amount').innerText.replace('-', '')) || 0;
+                    const couponDiscountValue = parseFloat(document.getElementById('coupon-discount-amount').innerText.replace('-', '')) || 0;
+                    const netAmountOnly = originalPriceValue - siteDiscountValue - couponDiscountValue;
+                    document.getElementById('amount-to-pay').innerText = (netAmountOnly + currentDeliveryCharge).toFixed(2).toLocaleString('bn-BD') + ' BDT';
+                    currentFinalAmount = netAmountOnly + currentDeliveryCharge;
+                }
+                // COD Alert Message আপডেট করা
+                if (selectedMethod === 'cod') {
+                    updatePaymentUI('cod');
                 }
             });
         });
@@ -1489,4 +1490,4 @@ ${paymentDetails}
         });
     </script>
 </body>
-    </html>
+            </html>
