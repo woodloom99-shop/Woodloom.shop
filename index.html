@@ -682,6 +682,21 @@
                     <p class="card-price"><span class="original-price">৳৮১৩</span> ৳৬৫০</p>
                 </article>
                 
+                <article class="product-card" data-item="মেডিসিন বক্স প্রিমিয়াম" data-price="750" data-original-price="938">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/rFf3hJ26/IMG-20251109-WA0008.jpg" alt="মেডিসিন বক্স প্রিমিয়াম">
+                    </div>
+                    <div class="card-title">মেডিসিন বক্স প্রিমিয়াম</div>
+                    <p class="card-price"><span class="original-price">৳৯৩৮</span> ৳৭৫০</p>
+                </article>
+                
+                <article class="product-card" data-item="মেডিসিন বক্স লাইট" data-price="590" data-original-price="738">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/13QhTKvj/IMG-20251109-WA0015.jpg" alt="মেডিসিন বক্স লাইট">
+                    </div>
+                    <div class="card-title">মেডিসিন বক্স লাইট</div>
+                    <p class="card-price"><span class="original-price">৳৭৩৮</span> ৳৫৯০</p>
+                </article>
                 <article class="product-card custom-order-card" data-item="কাস্টম অর্ডার" data-price="0" data-original-price="0">
                     <div class="card-image">
                         <img src="https://placehold.co/300x300/EFEBE9/5D4037?text=Custom+Order" alt="কাস্টম অর্ডার">
@@ -817,7 +832,7 @@
                             <span class="value" id="site-discount-amount">- 0.00 BDT</span>
                         </div>
                         <div class="discount-row coupon-row" id="coupon-discount-row" style="display: none;">
-                            <span class="label"><i class="fa-solid fa-ticket-simple" style="color:#4CAF50;"></i> কুপন ছাড় (<span id="coupon-code-display">wood10</span>):</span>
+                            <span class="label"><i class="fa-solid fa-ticket-simple" style="color:#4CAF50;"></i> কুপন ছাড় (<span id="coupon-code-display">WL99</span>):</span>
                             <span class="value" id="coupon-discount-amount">- 0.00 BDT</span>
                         </div>
                     </div>
@@ -975,8 +990,8 @@
         const GLOBAL_DISCOUNT_PERCENT = 0.20; // 20% ছাড়
         
         // ** কুপন কোড সেটিংস **
-        const VALID_COUPON_CODE = 'wood10'; // উদাহরণ কুপন
-        const COUPON_DISCOUNT_AMOUNT = 30.00; // 30 টাকা ছাড়
+        const VALID_COUPON_CODE = 'wl99'; // ✅ আপডেট করা কুপন কোড
+        const COUPON_DISCOUNT_AMOUNT = 10.00; // ✅ আপডেট করা ছাড়ের মূল্য
         
         // গ্লোবাল ভেরিয়েবল
         let selectedMethod = 'bikash';
@@ -1179,7 +1194,7 @@ ${paymentDetails}
             currentSiteDiscountAmount = currentOriginalAmount * GLOBAL_DISCOUNT_PERCENT;
             
             // ২. কুপন ডিসকাউন্ট গণনা
-            if (couponCode.toLowerCase() === VALID_COUPON_CODE.toLowerCase() && currentOriginalAmount >= COUPON_DISCOUNT_AMOUNT) {
+            if (couponCode.toLowerCase() === VALID_COUPON_CODE.toLowerCase() && (currentOriginalAmount - currentSiteDiscountAmount) >= COUPON_DISCOUNT_AMOUNT) {
                 appliedCouponDiscount = COUPON_DISCOUNT_AMOUNT;
                 document.getElementById('coupon-code-display').innerText = couponCode;
                 document.getElementById('coupon-discount-amount').innerText = `- ${appliedCouponDiscount.toFixed(2).toLocaleString('bn-BD')} BDT`;
@@ -1402,4 +1417,4 @@ ${paymentDetails}
         });
     </script>
 </body>
-  </html>
+                    </html>
