@@ -768,6 +768,15 @@
                     <div class="card-title">উইশ বল লাইট</div>
                     <p class="card-price"><span class="original-price">৳১৬৮৮</span> ৳১৩৫০</p>
                 </article>
+
+                <article class="product-card" data-item="ওমরাহ্ মানি সেভিংস বক্স" data-price="750" data-original-price="600">
+                    <div class="card-image">
+                        <img src="https://i.postimg.cc/q7T7675M/IMG-20251110-WA0001.jpg" alt="ওমরাহ্ মানি সেভিংস বক্স">
+                    </div>
+                    <div class="card-title">ওমরাহ্ মানি সেভিংস বক্স</div>
+                    <p class="card-price"><span class="original-price">৳৭৫০</span> ৳৬০০</p>
+                </article>
+                
                 <article class="product-card custom-order-card" data-item="কাস্টম অর্ডার" data-price="0" data-original-price="0">
                     <div class="card-image">
                         <img src="https://placehold.co/300x300/EFEBE9/5D4037?text=Custom+Order" alt="কাস্টম অর্ডার">
@@ -1227,6 +1236,28 @@
 মোট পরিশোধ: ${currentFinalAmount.toFixed(2)} টাকা
 ট্রানজেকশন আইডি: ${transactionId}
 স্ক্রিনশট লিংক: ${screenshotLink} `;
+            
+             // ইমেইল বডি তৈরি
+            const emailBody = `
+=================================
+Woodloom - নতুন অর্ডার রিকোয়েস্ট
+=================================
+অর্ডার কোড: ${lastGeneratedOrderNumber}
+গ্রাহকের নাম: ${customerName}
+হোয়াটসঅ্যাপ নম্বর: ${customerWhatsapp}
+ডেলিভারি ঠিকানা: ${customerAddress}
+গ্রাহকের ইমেইল: ${customerEmail}
+=================================
+অর্ডারের বিবরণ
+=================================
+পণ্যের নাম: ${currentItemName}
+কুপন কোড: ${orderCodeInput}
+=================================
+মূল্যের বিবরণ
+=================================
+${paymentDetails}
+=================================
+`;
             
             const subject = encodeURIComponent(`Woodloom অর্ডার: ${customerName} - ${currentItemName} (মোট: ${currentFinalAmount.toFixed(2)} BDT) - অর্ডার নং: ${lastGeneratedOrderNumber}`);
             const body = encodeURIComponent(emailBody);
