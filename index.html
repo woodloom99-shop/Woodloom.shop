@@ -295,9 +295,10 @@
            padding:20px;
            overflow-y:auto;
            height:calc(100vh - 60px);
+           padding-bottom:150px; /* নিচে extra স্পেস, যাতে বাটন ন্যাভের নিচে না যায় */
        }
        .checkout-btn {
-           margin-top:12px;
+           margin-top:16px;
            background:var(--primary-dark);
            color:#fff;
            padding:14px;
@@ -305,16 +306,11 @@
            font-weight:700;
            text-align:center;
            box-shadow:0 4px 14px rgba(0,0,0,0.25);
-           position:sticky;
-           bottom:10px;
        }
 
        @media (max-width: 400px) {
            .bottom-sheet {
                max-height: 92vh;
-           }
-           .checkout-btn {
-               bottom:14px;
            }
        }
    </style>
@@ -454,13 +450,16 @@
 <!-- PRODUCT DETAIL MODAL -->
 <div class="modal-overlay" id="product-backdrop" onclick="closeProductModal()"></div>
 <div class="bottom-sheet" id="product-sheet" onclick="event.stopPropagation();">
-    <div style="position:absolute; top:15px; right:15px; font-size:20px; z-index:10;" onclick="closeProductModal()"><i class="fa-solid fa-times"></i></div>
-    <div style="overflow-y:auto; height:100%; padding-bottom:160px;">
-        <!-- padding-bottom বাড়ানো হয়েছে যাতে নিচের বাটনের কারণে বিবরণ লুকিয়ে না যায় -->
+    <div style="position:absolute; top:15px; right:15px; font-size:20px; z-index:10;" onclick="closeProductModal()">
+        <i class="fa-solid fa-times"></i>
+    </div>
+
+    <div style="padding-bottom:20px; margin-top:10px;">
         <div class="carousel-wrapper">
             <img id="modal-img" src="" class="main-img">
         </div>
         <div class="thumb-row" id="modal-thumbs"></div>
+
         <div style="padding:20px;">
             <span id="modal-cat" style="font-size:12px; color:var(--accent-orange); font-weight:700; text-transform:uppercase;">CAT</span>
             <h1 id="modal-title" style="font-size:20px; font-weight:700; margin:5px 0;">Title</h1>
@@ -473,30 +472,32 @@
                 <span class="detail-pill"><i class="fa-solid fa-box"></i> উডেন হ্যান্ডমেইড</span>
                 <span class="detail-pill"><i class="fa-solid fa-shield-halved"></i> কোয়ালিটি চেকড</span>
             </div>
+
             <h3 style="font-size:14px; margin-top:15px; margin-bottom:5px;">পণ্যের বিবরণ</h3>
             <p id="modal-desc" style="font-size:13px; color:#555; line-height:1.6;"></p>
+
             <h3 style="font-size:14px; margin-top:15px; margin-bottom:5px;">হাইলাইটস</h3>
             <ul id="modal-highlights" style="margin-top:5px; list-style:none; font-size:13px;"></ul>
-        </div>
-    </div>
 
-    <!-- FOOTER: QTY + ADD TO CART + BUY NOW -->
-    <div style="position:absolute; bottom:0; width:100%; background:white; padding:15px; box-shadow:0 -5px 10px rgba(0,0,0,0.1);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span style="font-size:13px; font-weight:600;">পরিমাণ</span>
-            <div style="display:flex; align-items:center; background:#f5f5f5; border-radius:8px;">
-                <button onclick="updateQty(-1)" style="padding:10px 15px;">-</button>
-                <input type="text" id="modal-qty" value="1" readonly style="width:30px; text-align:center; background:transparent;">
-                <button onclick="updateQty(1)" style="padding:10px 15px;">+</button>
+            <div style="margin-top:18px; border-top:1px solid #eee; padding-top:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-size:13px; font-weight:600;">পরিমাণ</span>
+                    <div style="display:flex; align-items:center; background:#f5f5f5; border-radius:8px;">
+                        <button onclick="updateQty(-1)" style="padding:10px 15px;">-</button>
+                        <input type="text" id="modal-qty" value="1" readonly style="width:30px; text-align:center; background:transparent;">
+                        <button onclick="updateQty(1)" style="padding:10px 15px;">+</button>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button onclick="addToCart()" style="flex:1; border-radius:8px; padding:12px 0; font-weight:600; background:#ffffff; border:1px solid var(--primary-dark); color:var(--primary-dark);">
+                        ADD TO CART
+                    </button>
+                    <button onclick="buyNow()" style="flex:1; border-radius:8px; padding:12px 0; font-weight:600; background:var(--primary-dark); color:#ffffff;">
+                        BUY NOW
+                    </button>
+                </div>
             </div>
-        </div>
-        <div style="display:flex; gap:10px;">
-            <button onclick="addToCart()" style="flex:1; border-radius:8px; padding:12px 0; font-weight:600; background:#ffffff; border:1px solid var(--primary-dark); color:var(--primary-dark);">
-                ADD TO CART
-            </button>
-            <button onclick="buyNow()" style="flex:1; border-radius:8px; padding:12px 0; font-weight:600; background:var(--primary-dark); color:#ffffff;">
-                BUY NOW
-            </button>
         </div>
     </div>
 </div>
@@ -672,7 +673,7 @@
        },
        {
            id: 102,
-           name: "৩-ড্রয়ার মেডিসিন বক্স",
+           name: "প্রিমিয়াম মেডিডিন বক্স",
            cat: "box",
            price: 750,
            oldPrice: 938,
@@ -681,7 +682,7 @@
                "https://i.postimg.cc/PqzHJHZk/IMG-20251109-WA0006.jpg"
            ],
            highlights: ["৩টি ড্রয়ার", "মজবুত"],
-           desc: "পরিবারের সব ঔষধ এক জায়গায় গুছিয়ে রাখার সেরা সমাধান এই ৩-ড্রয়ার মেডিসিন বক্স। আলাদা সেকশন থাকায় ট্যাবলেট, সিরাপ ও অন্যান্য আইটেম সহজে খুঁজে পাওয়া যায়।"
+           desc: "পরিবারের সব ঔষধ এক জায়গায় গুছিয়ে রাখার সেরা সমাধান এই প্রিমিয়াম মেডিডিন বক্স। আলাদা সেকশন থাকায় ট্যাবলেট, সিরাপ ও অন্যান্য আইটেম সহজে খুঁজে পাওয়া যায়।"
        },
        {
            id: 103,
@@ -1038,7 +1039,6 @@
        toggleCart();
    }
 
-   // BUY NOW
    function buyNow() {
        if(!currentProd) return;
        const ex = cart.find(x => x.id === currentProd.id);
@@ -1046,14 +1046,14 @@
        else cart.push({...currentProd, qty});
        saveCart();
        closeProductModal();
-       openCheckout();   // সরাসরি চেকআউটে যাবে
+       openCheckout();
    }
 
    /* CART */
    function saveCart() {
         localStorage.setItem('wl_cart', JSON.stringify(cart));
         updateCart();
-    }
+   }
    function updateCart() {
        const count = cart.reduce((a,b)=>a+b.qty,0);
        const total = cart.reduce((a,b)=>a+(b.price*b.qty),0);
@@ -1098,24 +1098,24 @@
    function remItem(id) {
         cart = cart.filter(x=>x.id !== id);
         saveCart();
-    }
+   }
    function toggleCart() {
        const d = document.getElementById('cart-drawer');
        const b = document.getElementById('cart-backdrop');
        if(d.classList.contains('open')) {
             d.classList.remove('open');
             b.classList.remove('open');
-        }
+       }
        else {
             d.classList.add('open');
             b.classList.add('open');
-        }
+       }
    }
 
    /* WISHLIST */
    function openWishlist() {
         switchTab('wishlist');
-    }
+   }
    function toggleWish(e, id) {
        e.stopPropagation();
        if(wishlist.includes(id)) {
@@ -1171,7 +1171,7 @@
    function closeCheckout() {
         document.getElementById('checkout-modal').classList.remove('open');
         clearInterval(timerInt);
-    }
+   }
 
    function startTimer() {
        let t = 600; clearInterval(timerInt);
@@ -1205,12 +1205,12 @@
             discount = 10;
             document.getElementById('coupon-msg').innerText = "কুপন সাকসেস!";
             document.getElementById('coupon-msg').style.color="green";
-        }
+       }
        else {
             discount = 0;
             document.getElementById('coupon-msg').innerText = "ভুল কুপন";
             document.getElementById('coupon-msg').style.color="red";
-        }
+       }
        updateSumm();
    }
 
@@ -1226,7 +1226,7 @@
        if(discount>0) {
             document.getElementById('summ-disc-row').style.display='flex';
             document.getElementById('summ-disc').innerText=`-৳${discount}`;
-        }
+       }
        else document.getElementById('summ-disc-row').style.display='none';
        document.getElementById('summ-total').innerText = `৳${sub+delCost-discount}`;
    }
@@ -1234,7 +1234,8 @@
    function copyNum() {
         navigator.clipboard.writeText(PAY_NUM);
         toast("নাম্বার কপি হয়েছে");
-    }
+   }
+
    function placeOrder() {
        const name = document.getElementById('c-name').value.trim();
        const phone = document.getElementById('c-phone').value.trim();
@@ -1256,7 +1257,6 @@
        const sub = cart.reduce((a,b)=>a+(b.price*b.qty),0);
        const total = sub + delCost - discount;
 
-       // শুধুমাত্র ইমেইল পেমেন্ট রিকোয়েস্ট
        let mail = `অর্ডার আইডি: ${oid}\n\n`;
        mail += `নাম: ${name}\n`;
        mail += `ফোন: ${phone}\n`;
@@ -1299,4 +1299,4 @@
    }
 </script>
 </body>
-                    </html>
+    </html>
