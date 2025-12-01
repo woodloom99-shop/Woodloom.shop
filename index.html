@@ -91,6 +91,16 @@
            margin: 15px; padding: 20px; background: linear-gradient(135deg, #5D4037 0%, #3E2723 100%);
            border-radius: var(--radius); color: white; display: flex; justify-content: space-between; align-items: center;
            box-shadow: var(--shadow);
+           overflow: hidden;
+       }
+       
+       /* Banner Animation Class */
+       .fade-img {
+           animation: fadeIn 0.5s ease-in-out;
+       }
+       @keyframes fadeIn {
+           from { opacity: 0; transform: rotate(-15deg) scale(0.9); }
+           to { opacity: 1; transform: rotate(-15deg) scale(1); }
        }
 
        .sort-wrap select{
@@ -317,14 +327,12 @@
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash-screen">
     <img src="https://i.postimg.cc/YSy31GQV/1762677360931.png" style="width:120px; border-radius:10px;">
     <div class="loader-spinner"></div>
     <p style="color:white; margin-top:15px; font-size:14px;">লোড হচ্ছে...</p>
 </div>
 
-<!-- APP -->
 <div id="app-container" style="display:none;">
 
     <header class="app-header">
@@ -349,7 +357,6 @@
         </div>
     </header>
 
-    <!-- HOME -->
     <div id="view-home">
         <div class="section-header">
             <span class="section-title">ক্যাটাগরি</span>
@@ -360,12 +367,12 @@
             <div class="promo-banner">
                 <div>
                     <h3 style="font-size:20px; font-weight:700;">স্পেশাল অফার!</h3>
-                    <p style="font-size:13px; opacity:0.9;">যেকোনো কম্বো প্যাকে ১০% ছাড়</p>
+                    <p style="font-size:13px; opacity:0.9;">যেকোনো কম্বো প্যাকে ২০% ছাড়</p>
                     <div class="detail-pill" style="margin-top:6px; display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.25); color:#fff;">
                         <i class="fa-solid fa-clock"></i> আজকের জন্য প্রযোজ্য
                     </div>
                 </div>
-                <img src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" style="width:80px; transform:rotate(-15deg); border-radius:10px;">
+                <img id="banner-img" src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" style="width:80px; transform:rotate(-15deg); border-radius:10px;">
             </div>
         </div>
 
@@ -381,7 +388,6 @@
         </div>
         <div class="product-grid" id="product-grid"></div>
 
-        <!-- Testimonials -->
         <div class="testimonial-container">
             <h2 style="text-align:center; font-size:20px; color:var(--primary-dark); margin-bottom:20px;">গ্রাহকের মতামত ❤️</h2>
             <div class="t-scroll">
@@ -409,14 +415,12 @@
         </div>
     </div>
 
-    <!-- WISHLIST -->
     <div id="view-wishlist" class="hidden" style="padding:15px;">
         <h2 style="margin-bottom:15px; color:var(--primary-dark);">পছন্দের তালিকা ❤️</h2>
         <div id="wishlist-grid" class="product-grid"></div>
         <div id="empty-wishlist" style="text-align:center; margin-top:50px; color:#999;">কোনো পণ্য নেই</div>
     </div>
 
-    <!-- GUIDE -->
     <div id="view-guide" class="hidden" style="padding:15px;">
         <h2 style="margin-bottom:15px; color:var(--primary-dark);">অর্ডার করার নিয়ম 📘</h2>
 
@@ -447,7 +451,6 @@
 
 </div>
 
-<!-- PRODUCT DETAIL MODAL -->
 <div class="modal-overlay" id="product-backdrop" onclick="closeProductModal()"></div>
 <div class="bottom-sheet" id="product-sheet" onclick="event.stopPropagation();">
     <div style="position:absolute; top:15px; right:15px; font-size:20px; z-index:10;" onclick="closeProductModal()">
@@ -502,7 +505,6 @@
     </div>
 </div>
 
-<!-- CART -->
 <div class="modal-overlay" id="cart-backdrop" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cart-drawer" onclick="event.stopPropagation();">
     <div style="padding:20px; background:var(--primary-dark); color:white; display:flex; justify-content:space-between; align-items:center;">
@@ -518,7 +520,6 @@
     </div>
 </div>
 
-<!-- CHECKOUT FULL SCREEN -->
 <div class="bottom-sheet" id="checkout-modal" style="height:100%; border-radius:0; z-index:4000;">
     <div style="padding:15px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:10px;">
         <i class="fa-solid fa-arrow-left" onclick="closeCheckout()"></i>
@@ -610,7 +611,6 @@
     </div>
 </div>
 
-<!-- SUCCESS VIEW -->
 <div id="success-view" style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:5000; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
     <i class="fa-solid fa-circle-check" style="font-size:60px; color:var(--success); margin-bottom:20px;"></i>
     <h2>অর্ডার সফল!</h2>
@@ -619,7 +619,6 @@
     <button onclick="location.reload()" style="margin-top:30px; background:var(--primary-dark); color:white; padding:10px 25px; border-radius:8px;">হোমে যান</button>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
     <div class="nav-item active" onclick="switchTab('home', this)">
         <i class="fa-solid fa-house"></i>
@@ -673,15 +672,17 @@
        },
        {
            id: 102,
-           name: "প্রিমিয়াম মেডিডিন বক্স",
+           name: "মেডিসিন বক্স প্রিমিয়াম",
            cat: "box",
            price: 750,
            oldPrice: 938,
-           img: "https://i.postimg.cc/PqzHJHZk/IMG-20251109-WA0006.jpg",
+           img: "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
            images: [
-               "https://i.postimg.cc/PqzHJHZk/IMG-20251109-WA0006.jpg"
+               "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/mZyjcs4z/Screenshot-2025-12-01-13-07-54-70-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/B6q8kRVk/Screenshot-2025-12-01-13-07-44-71-99c04817c0de5652397fc8b56c3b3817.jpg"
            ],
-           highlights: ["৩টি ড্রয়ার", "মজবুত"],
+           highlights: ["৪টি ড্রয়ার", "মজবুত"],
            desc: "পরিবারের সব ঔষধ এক জায়গায় গুছিয়ে রাখার সেরা সমাধান এই প্রিমিয়াম মেডিডিন বক্স। আলাদা সেকশন থাকায় ট্যাবলেট, সিরাপ ও অন্যান্য আইটেম সহজে খুঁজে পাওয়া যায়।"
        },
        {
@@ -696,32 +697,6 @@
            ],
            highlights: ["ভেলভেট লাইনিং", "লক সিস্টেম"],
            desc: "গহনা সুরক্ষিত ও ঝকঝকে রাখতে নকশা করা এই জুয়েলারি বক্সটি দারুণ উপযোগী। ভেতরের ভেলভেট ফিনিশিং এবং লক সিস্টেম আপনার প্রিয় গয়না সেফ রাখবে।"
-       },
-       {
-           id: 104,
-           name: "১ লক্ষ টাকা সেভিং বক্স",
-           cat: "box",
-           price: 650,
-           oldPrice: 813,
-           img: "https://i.postimg.cc/BQcR2ptq/IMG-20251109-WA0002.jpg",
-           images: [
-               "https://i.postimg.cc/BQcR2ptq/IMG-20251109-WA0002.jpg"
-           ],
-           highlights: ["চ্যালেঞ্জ বক্স", "আনব্রেকেবল"],
-           desc: "১ লক্ষ টাকা সেভিং চ্যালেঞ্জের জন্য বিশেষভাবে ডিজাইন করা এই বক্সটি আপনাকে সেভিং হ্যাবিট গড়তে সাহায্য করবে। মজবুত কাঠ ও সুন্দর প্রিন্ট এটিকে গিফট হিসেবেও আদর্শ করে তোলে।"
-       },
-       {
-           id: 105,
-           name: "মেডিসিন বক্স প্রিমিয়াম",
-           cat: "box",
-           price: 750,
-           oldPrice: 938,
-           img: "https://i.postimg.cc/rFf3hJ26/IMG-20251109-WA0008.jpg",
-           images: [
-               "https://i.postimg.cc/rFf3hJ26/IMG-20251109-WA0008.jpg"
-           ],
-           highlights: ["বড় সাইজ", "প্রিমিয়াম"],
-           desc: "বড় পরিবারের জন্য তৈরি প্রিমিয়াম মেডিসিন বক্স, যেখানে প্রচুর ঔষধ সহজে রাখা যায়। সেকশনভিত্তিক ভাগ থাকায় কোন ঔষধ কোথায় আছে তা দ্রুত বুঝে নেওয়া যায়।"
        },
        {
            id: 106,
@@ -764,13 +739,15 @@
        },
        {
            id: 109,
-           name: "মানি সেভিং বক্স",
+           name: "সেভিংস বক্স প্রিমিয়াম",
            cat: "box",
            price: 650,
            oldPrice: 813,
-           img: "https://i.postimg.cc/cJRrF3nJ/IMG-20251109-WA0003.jpg",
+           img: "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
            images: [
-               "https://i.postimg.cc/cJRrF3nJ/IMG-20251109-WA0003.jpg"
+               "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/HWNw8sKk/Screenshot-2025-12-01-13-02-12-03-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/GmLGZ8T4/Screenshot-2025-12-01-13-14-37-27-99c04817c0de5652397fc8b56c3b3817.jpg"
            ],
            highlights: ["সুন্দর ফিনিশিং", "সেভিংস"],
            desc: "টাকা জমানোর অভ্যাস তৈরি করতে মানি সেভিং বক্স দারুণ মোটিভেশন তৈরি করে। সুন্দর কাঠের ফিনিশিং এবং প্রিন্টেড ডিজাইন একে শো-পিস হিসেবেও ব্যবহারযোগ্য করে তুলেছে।"
@@ -906,6 +883,7 @@
            setTimeout(() => {
                document.getElementById('splash-screen').style.display = 'none';
                document.getElementById('app-container').style.display = 'block';
+               initBanner(); // Start banner animation
            }, 500);
        }, 1500);
 
@@ -914,6 +892,28 @@
        updateCart();
        renderWishlist();
    };
+
+   // BANNER LOGIC
+   function initBanner() {
+       const bImages = [
+           "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
+           "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
+           "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
+           "https://i.postimg.cc/4dwjZX0q/IMG-20251110-WA0006.jpg"
+       ];
+       let bIdx = 0;
+       const imgEl = document.getElementById('banner-img');
+       
+       setInterval(() => {
+           bIdx = (bIdx + 1) % bImages.length;
+           // simple fade effect
+           imgEl.style.opacity = '0';
+           setTimeout(() => {
+               imgEl.src = bImages[bIdx];
+               imgEl.style.opacity = '1';
+           }, 200);
+       }, 3500); // Change image every 3.5 seconds
+   }
 
    function initCats() {
        document.getElementById('cat-list').innerHTML = categories.map(c => `
@@ -1299,4 +1299,4 @@
    }
 </script>
 </body>
-    </html>
+                        </html>
