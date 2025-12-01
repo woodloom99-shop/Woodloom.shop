@@ -74,6 +74,57 @@
            display: flex; align-items: center; justify-content: center;
        }
 
+       /* --- NEWS TICKER (UPDATED SPEED) --- */
+       .news-container {
+           background: #fff;
+           height: 36px;
+           display: flex;
+           align-items: center;
+           margin: 10px 15px 0;
+           border-radius: 50px;
+           box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+           overflow: hidden;
+           border: 1px solid #eee;
+       }
+       .news-label {
+           background: var(--error);
+           color: white;
+           padding: 0 12px;
+           height: 100%;
+           display: flex;
+           align-items: center;
+           font-size: 11px;
+           font-weight: 700;
+           z-index: 2;
+           box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+       }
+       .news-scroll-box {
+           flex: 1;
+           overflow: hidden;
+           position: relative;
+           height: 100%;
+           display: flex;
+           align-items: center;
+       }
+       .news-text {
+           white-space: nowrap;
+           font-size: 12px;
+           color: var(--primary-dark);
+           font-weight: 500;
+           position: absolute;
+           /* 40s মানে ৪০ সেকেন্ড সময় নেবে, এটি বাড়ালে আরও স্লো হবে */
+           animation: ticker 40s linear infinite; 
+       }
+       /* মাউস বা টাচ করলে লেখা থামবে */
+       .news-scroll-box:hover .news-text {
+           animation-play-state: paused;
+       }
+
+       @keyframes ticker {
+           0% { transform: translateX(100%); left: 100%; }
+           100% { transform: translateX(-100%); left: 0; }
+       }
+
        /* CATEGORY + BANNER */
        .section-header { padding: 0 15px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
        .section-title { font-size: 18px; font-weight: 700; color: var(--primary-dark); }
@@ -98,19 +149,13 @@
            display: flex; align-items: center;
            transition: background 0.5s ease;
        }
-       
        .banner-inner {
            display: flex; justify-content: space-between; align-items: center; width: 100%;
            transition: opacity 0.4s ease, transform 0.4s ease;
            opacity: 1; transform: translateX(0);
        }
-       .banner-inner.fade-out {
-           opacity: 0;
-           transform: translateX(-20px);
-       }
-       .banner-inner.fade-in {
-           animation: slideIn 0.4s ease forwards;
-       }
+       .banner-inner.fade-out { opacity: 0; transform: translateX(-20px); }
+       .banner-inner.fade-in { animation: slideIn 0.4s ease forwards; }
        @keyframes slideIn {
            from { opacity: 0; transform: translateX(20px); }
            to { opacity: 1; transform: translateX(0); }
@@ -132,10 +177,7 @@
            transition: transform 0.2s ease, box-shadow 0.2s ease;
            cursor:pointer;
        }
-       .product-card:hover {
-           transform: translateY(-3px);
-           box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-       }
+       .product-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
        .p-badge { position: absolute; top: 10px; left: 10px; background: var(--accent-orange); color: white; padding: 3px 8px; font-size: 10px; border-radius: 4px; font-weight: bold; z-index: 2; }
        .p-img-wrap { padding-top: 100%; position: relative; background: #f9f9f9; }
        .p-img-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -146,19 +188,9 @@
        .p-subtext { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
        .wish-btn {
-           position:absolute;
-           top:10px;
-           right:10px;
-           width:28px;
-           height:28px;
-           border-radius:50%;
-           background:rgba(255,255,255,0.9);
-           display:flex;
-           align-items:center;
-           justify-content:center;
-           box-shadow:0 2px 4px rgba(0,0,0,0.15);
-           cursor:pointer;
-           z-index:3;
+           position:absolute; top:10px; right:10px; width:28px; height:28px; border-radius:50%;
+           background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center;
+           box-shadow:0 2px 4px rgba(0,0,0,0.15); cursor:pointer; z-index:3;
        }
        .wish-btn i { font-size:14px; color:#999; }
        .wish-btn.active i { color:#e91e63; }
@@ -192,55 +224,14 @@
        .bottom-sheet.open { bottom: 0; }
 
        /* PRODUCT DETAIL */
-       .carousel-wrapper {
-           position:relative;
-           width:100%;
-           background:#000;
-       }
-       .main-img {
-           width:100%;
-           max-height:320px;
-           object-fit:cover;
-           border-top-left-radius:25px;
-           border-top-right-radius:25px;
-       }
-       .thumb-row {
-           display:flex;
-           gap:8px;
-           padding:10px 15px 5px;
-           overflow-x:auto;
-           background:#fff;
-       }
-       .thumb-item {
-           flex:0 0 auto;
-           width:60px;
-           height:60px;
-           border-radius:8px;
-           overflow:hidden;
-           border:2px solid transparent;
-           cursor:pointer;
-       }
-       .thumb-item img {
-           width:100%;
-           height:100%;
-           object-fit:cover;
-       }
-       .thumb-item.active {
-           border-color:var(--accent-gold);
-       }
-       .detail-badge-row {
-           display:flex;
-           gap:8px;
-           margin-top:10px;
-           flex-wrap:wrap;
-       }
-       .detail-pill {
-           font-size:11px;
-           background:#f5f5f5;
-           padding:4px 8px;
-           border-radius:999px;
-           color:#555;
-       }
+       .carousel-wrapper { position:relative; width:100%; background:#000; }
+       .main-img { width:100%; max-height:320px; object-fit:cover; border-top-left-radius:25px; border-top-right-radius:25px; }
+       .thumb-row { display:flex; gap:8px; padding:10px 15px 5px; overflow-x:auto; background:#fff; }
+       .thumb-item { flex:0 0 auto; width:60px; height:60px; border-radius:8px; overflow:hidden; border:2px solid transparent; cursor:pointer; }
+       .thumb-item img { width:100%; height:100%; object-fit:cover; }
+       .thumb-item.active { border-color:var(--accent-gold); }
+       .detail-badge-row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+       .detail-pill { font-size:11px; background:#f5f5f5; padding:4px 8px; border-radius:999px; color:#555; }
 
        /* CART */
        .cart-drawer {
@@ -249,36 +240,9 @@
            box-shadow: -5px 0 20px rgba(0,0,0,0.2);
        }
        .cart-drawer.open { right: 0; }
-
-       .cart-footer{
-           padding:10px 16px 18px;
-           border-top:1px solid #eee;
-           position:sticky;
-           bottom:70px;
-           background:#fff;
-           box-shadow:0 -3px 10px rgba(0,0,0,0.1);
-           border-radius:14px 14px 0 0;
-       }
-       .cart-checkout-btn{
-           background:var(--success);
-           color:#fff;
-           padding:11px;
-           text-align:center;
-           border-radius:10px;
-           font-weight:600;
-       }
-
-       .qty-btn{
-           width:22px;
-           height:22px;
-           border-radius:50%;
-           background:#f1f1f1;
-           display:flex;
-           align-items:center;
-           justify-content:center;
-           font-size:13px;
-           cursor:pointer;
-       }
+       .cart-footer{ padding:10px 16px 18px; border-top:1px solid #eee; position:sticky; bottom:70px; background:#fff; box-shadow:0 -3px 10px rgba(0,0,0,0.1); border-radius:14px 14px 0 0; }
+       .cart-checkout-btn{ background:var(--success); color:#fff; padding:11px; text-align:center; border-radius:10px; font-weight:600; }
+       .qty-btn{ width:22px; height:22px; border-radius:50%; background:#f1f1f1; display:flex; align-items:center; justify-content:center; font-size:13px; cursor:pointer; }
 
        /* GUIDE */
        .guide-container { padding: 20px; background: white; border-radius: 10px; margin: 15px; box-shadow: var(--shadow); }
@@ -302,40 +266,28 @@
        .input-field { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
        .radio-opt { display: flex; justify-content: space-between; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; cursor: pointer; }
        .radio-opt.selected { border-color: var(--primary-main); background: #fdefe9; }
-
        .timer-badge { background: var(--error); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 12px; z-index: 6000; animation: fadeUp 0.3s; }
        @keyframes fadeUp { from {opacity:0; transform:translate(-50%, 20px);} to {opacity:1; transform:translate(-50%, 0);} }
-
        .hidden { display: none !important; }
 
        /* CHECKOUT SCROLL FIX */
-       #checkout-modal{
-           max-height:100vh;
-           overflow:hidden;
+       #checkout-modal{ max-height:100vh; overflow:hidden; }
+       .checkout-container { padding:20px; overflow-y:auto; height:calc(100vh - 60px); padding-bottom:150px; }
+       .checkout-btn { margin-top:16px; background:var(--primary-dark); color:#fff; padding:14px; border-radius:12px; font-weight:700; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,0.25); }
+       
+       /* FLOATING CART BTN */
+       .float-cart {
+           position: fixed; bottom: 70px; right: 20px; width: 50px; height: 50px;
+           background: var(--primary-dark); color: white; border-radius: 50%;
+           display: flex; align-items: center; justify-content: center;
+           box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 4900;
+           display: none; animation: popIn 0.3s;
        }
-       .checkout-container {
-           padding:20px;
-           overflow-y:auto;
-           height:calc(100vh - 60px);
-           padding-bottom:150px; /* নিচে extra স্পেস, যাতে বাটন ন্যাভের নিচে না যায় */
-       }
-       .checkout-btn {
-           margin-top:16px;
-           background:var(--primary-dark);
-           color:#fff;
-           padding:14px;
-           border-radius:12px;
-           font-weight:700;
-           text-align:center;
-           box-shadow:0 4px 14px rgba(0,0,0,0.25);
-       }
+       .float-cart.show { display: flex; }
+       @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
 
-       @media (max-width: 400px) {
-           .bottom-sheet {
-               max-height: 92vh;
-           }
-       }
+       @media (max-width: 400px) { .bottom-sheet { max-height: 92vh; } }
    </style>
 </head>
 <body>
@@ -371,6 +323,15 @@
     </header>
 
     <div id="view-home">
+        <div class="news-container">
+            <div class="news-label">নোটিশ</div>
+            <div class="news-scroll-box">
+                <div class="news-text">
+                    📢WOODLOOM অফিসিয়াল নোটিশ: এখানে অর্ডার করতে কোনো অগ্রিম টাকা লাগে না; সব প্রোডাক্ট আধুনিক কাটিং মেশিনে তৈরি হওয়ায় কোয়ালিটি নিখুঁত ও স্ট্যান্ডার্ড থাকে; রঙ/ফিনিশিংয়ে সামান্য ভিন্নতা থাকতে পারে; অর্ডার প্রস্তুত হতে ২–৪ দিন এবং ডেলিভারি ৩–৭ দিন সময় লাগে; আমরা কোনো নকল বা চীনামাল বিক্রি করি না; শুধুমাত্র অফিসিয়াল পেজ/ওয়েবসাইট থেকে অর্ডার গ্রহণ করা হয়; ক্রেতার তথ্য সম্পূর্ণ সুরক্ষিত—ফেক পেজ ও স্ক্যামের বিরুদ্ধে সতর্ক থাকুন।।
+                </div>
+            </div>
+        </div>
+
         <div class="section-header">
             <span class="section-title">ক্যাটাগরি</span>
         </div>
@@ -464,6 +425,10 @@
         </div>
     </div>
 
+</div>
+
+<div class="float-cart" id="float-cart-btn" onclick="toggleCart()">
+    <i class="fa-solid fa-cart-shopping"></i>
 </div>
 
 <div class="modal-overlay" id="product-backdrop" onclick="closeProductModal()"></div>
@@ -672,7 +637,6 @@
    ];
 
    const products = [
-       // TOP PRODUCTS AS REQUESTED
        {
            id: 102,
            name: "মেডিসিন বক্স প্রিমিয়াম",
@@ -703,7 +667,6 @@
            highlights: ["সুন্দর ফিনিশিং", "সেভিংস"],
            desc: "টাকা জমানোর অভ্যাস তৈরি করতে মানি সেভিং বক্স দারুণ মোটিভেশন তৈরি করে। সুন্দর কাঠের ফিনিশিং এবং প্রিন্টেড ডিজাইন একে শো-পিস হিসেবেও ব্যবহারযোগ্য করে তুলেছে।"
        },
-       // OTHER PRODUCTS
        {
            id: 101,
            name: "কাঠের টিস্যু বক্স",
@@ -900,7 +863,7 @@
            setTimeout(() => {
                document.getElementById('splash-screen').style.display = 'none';
                document.getElementById('app-container').style.display = 'block';
-               initDynamicBanner(); // START NEW ANIMATION
+               initDynamicBanner();
            }, 500);
        }, 1500);
 
@@ -910,7 +873,7 @@
        renderWishlist();
    };
 
-   // --- NEW MYGP/BKASH STYLE BANNER LOGIC ---
+   // --- MYGP/BKASH STYLE BANNER LOGIC ---
    function initDynamicBanner() {
        const bannerData = [
            {
@@ -918,21 +881,21 @@
                text: "যেকোনো কম্বো প্যাকে ২০% ছাড়",
                tag: "আজকের ডিল",
                img: "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
-               bg: "linear-gradient(135deg, #5D4037 0%, #3E2723 100%)" // Brown
+               bg: "linear-gradient(135deg, #5D4037 0%, #3E2723 100%)"
            },
            {
                title: "মেডিসিন বক্স",
                text: "ঔষধ গুছিয়ে রাখুন নিরাপদে",
                tag: "বেস্ট সেলার",
                img: "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
-               bg: "linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)" // Green
+               bg: "linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)"
            },
            {
                title: "সেভিংস বক্স",
                text: "টাকা জমানোর নতুন উপায়",
                tag: "জনপ্রিয়",
                img: "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
-               bg: "linear-gradient(135deg, #F57F17 0%, #BF360C 100%)" // Orange
+               bg: "linear-gradient(135deg, #F57F17 0%, #BF360C 100%)"
            }
        ];
 
@@ -945,29 +908,22 @@
        const imgEl = document.getElementById('banner-img');
 
        setInterval(() => {
-           // 1. Fade Out
            content.classList.add('fade-out');
            content.classList.remove('fade-in');
 
            setTimeout(() => {
-               // 2. Change Content
                idx = (idx + 1) % bannerData.length;
                const data = bannerData[idx];
-               
                titleEl.innerText = data.title;
                textEl.innerText = data.text;
                tagEl.innerText = data.tag;
                imgEl.src = data.img;
-               
-               // Change Background of container
                container.style.background = data.bg;
-
-               // 3. Fade In
                content.classList.remove('fade-out');
                content.classList.add('fade-in');
-           }, 400); // Wait for fade out to finish
+           }, 400);
 
-       }, 4000); // Change every 4 seconds
+       }, 4000);
    }
 
    function initCats() {
@@ -1117,6 +1073,11 @@
        document.getElementById('nav-badge').innerText = count;
        document.getElementById('drawer-count').innerText = count;
        document.getElementById('cart-total').innerText = `৳${total}`;
+
+       // Float Btn
+       const floatBtn = document.getElementById('float-cart-btn');
+       if(count > 0) floatBtn.classList.add('show');
+       else floatBtn.classList.remove('show');
 
        if(cart.length === 0) {
            document.getElementById('cart-items').innerHTML = '<p style="text-align:center; color:#999; margin-top:30px;">কার্ট খালি</p>';
@@ -1354,4 +1315,4 @@
    }
 </script>
 </body>
-                                              </html>
+                                             </html>
