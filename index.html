@@ -87,20 +87,33 @@
        }
        .cat-item.active .cat-icon { background: var(--primary-dark); color: var(--accent-gold); transform: scale(1.1); }
 
+       /* Dynamic Banner Style */
        .promo-banner {
-           margin: 15px; padding: 20px; background: linear-gradient(135deg, #5D4037 0%, #3E2723 100%);
-           border-radius: var(--radius); color: white; display: flex; justify-content: space-between; align-items: center;
+           margin: 15px; padding: 20px; 
+           background: linear-gradient(135deg, #5D4037 0%, #3E2723 100%);
+           border-radius: var(--radius); color: white; 
            box-shadow: var(--shadow);
            overflow: hidden;
+           min-height: 140px;
+           display: flex; align-items: center;
+           transition: background 0.5s ease;
        }
        
-       /* Banner Animation Class */
-       .fade-img {
-           animation: fadeIn 0.5s ease-in-out;
+       .banner-inner {
+           display: flex; justify-content: space-between; align-items: center; width: 100%;
+           transition: opacity 0.4s ease, transform 0.4s ease;
+           opacity: 1; transform: translateX(0);
        }
-       @keyframes fadeIn {
-           from { opacity: 0; transform: rotate(-15deg) scale(0.9); }
-           to { opacity: 1; transform: rotate(-15deg) scale(1); }
+       .banner-inner.fade-out {
+           opacity: 0;
+           transform: translateX(-20px);
+       }
+       .banner-inner.fade-in {
+           animation: slideIn 0.4s ease forwards;
+       }
+       @keyframes slideIn {
+           from { opacity: 0; transform: translateX(20px); }
+           to { opacity: 1; transform: translateX(0); }
        }
 
        .sort-wrap select{
@@ -364,15 +377,17 @@
         <div class="cat-scroll" id="cat-list"></div>
 
         <div style="padding: 0 15px;">
-            <div class="promo-banner">
-                <div>
-                    <h3 style="font-size:20px; font-weight:700;">স্পেশাল অফার!</h3>
-                    <p style="font-size:13px; opacity:0.9;">যেকোনো কম্বো প্যাকে ২০% ছাড়</p>
-                    <div class="detail-pill" style="margin-top:6px; display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,0.25); color:#fff;">
-                        <i class="fa-solid fa-clock"></i> আজকের জন্য প্রযোজ্য
+            <div class="promo-banner" id="main-banner">
+                <div class="banner-inner" id="banner-content">
+                    <div>
+                        <h3 id="banner-title" style="font-size:18px; font-weight:700; line-height:1.2;">স্পেশাল অফার!</h3>
+                        <p id="banner-text" style="font-size:12px; opacity:0.9; margin-top:5px;">যেকোনো কম্বো প্যাকে ২০% ছাড়</p>
+                        <div class="detail-pill" style="margin-top:8px; display:inline-flex; align-items:center; gap:4px; background:rgba(255,255,255,0.2); backdrop-filter:blur(5px); color:#fff; border:1px solid rgba(255,255,255,0.3);">
+                            <i class="fa-solid fa-clock"></i> <span id="banner-tag">আজকের ডিল</span>
+                        </div>
                     </div>
+                    <img id="banner-img" src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" style="width:90px; height:90px; object-fit:contain; transform:rotate(-10deg); filter:drop-shadow(0 5px 10px rgba(0,0,0,0.3));">
                 </div>
-                <img id="banner-img" src="https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg" style="width:80px; transform:rotate(-15deg); border-radius:10px;">
             </div>
         </div>
 
@@ -657,19 +672,7 @@
    ];
 
    const products = [
-       {
-           id: 101,
-           name: "কাঠের টিস্যু বক্স",
-           cat: "box",
-           price: 599,
-           oldPrice: 749,
-           img: "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
-           images: [
-               "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg"
-           ],
-           highlights: ["প্রিমিয়াম কাঠ", "হ্যান্ডমেইড"],
-           desc: "ড্রইংরুমের জন্য প্রিমিয়াম টিস্যু বক্স। প্রতিদিনের ব্যবহারে টেকসই, সহজে পরিষ্কার করা যায় এবং যেকোনো টেবিলকে স্টাইলিশ করে তোলে।"
-       },
+       // TOP PRODUCTS AS REQUESTED
        {
            id: 102,
            name: "মেডিসিন বক্স প্রিমিয়াম",
@@ -684,6 +687,35 @@
            ],
            highlights: ["৪টি ড্রয়ার", "মজবুত"],
            desc: "পরিবারের সব ঔষধ এক জায়গায় গুছিয়ে রাখার সেরা সমাধান এই প্রিমিয়াম মেডিডিন বক্স। আলাদা সেকশন থাকায় ট্যাবলেট, সিরাপ ও অন্যান্য আইটেম সহজে খুঁজে পাওয়া যায়।"
+       },
+       {
+           id: 109,
+           name: "সেভিংস বক্স প্রিমিয়াম",
+           cat: "box",
+           price: 650,
+           oldPrice: 813,
+           img: "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
+           images: [
+               "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/HWNw8sKk/Screenshot-2025-12-01-13-02-12-03-99c04817c0de5652397fc8b56c3b3817.jpg",
+               "https://i.postimg.cc/GmLGZ8T4/Screenshot-2025-12-01-13-14-37-27-99c04817c0de5652397fc8b56c3b3817.jpg"
+           ],
+           highlights: ["সুন্দর ফিনিশিং", "সেভিংস"],
+           desc: "টাকা জমানোর অভ্যাস তৈরি করতে মানি সেভিং বক্স দারুণ মোটিভেশন তৈরি করে। সুন্দর কাঠের ফিনিশিং এবং প্রিন্টেড ডিজাইন একে শো-পিস হিসেবেও ব্যবহারযোগ্য করে তুলেছে।"
+       },
+       // OTHER PRODUCTS
+       {
+           id: 101,
+           name: "কাঠের টিস্যু বক্স",
+           cat: "box",
+           price: 599,
+           oldPrice: 749,
+           img: "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
+           images: [
+               "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg"
+           ],
+           highlights: ["প্রিমিয়াম কাঠ", "হ্যান্ডমেইড"],
+           desc: "ড্রইংরুমের জন্য প্রিমিয়াম টিস্যু বক্স। প্রতিদিনের ব্যবহারে টেকসই, সহজে পরিষ্কার করা যায় এবং যেকোনো টেবিলকে স্টাইলিশ করে তোলে।"
        },
        {
            id: 103,
@@ -736,21 +768,6 @@
            ],
            highlights: ["অফিস ডেস্ক", "ইউনিক"],
            desc: "অফিস ডেস্ক বা স্টাডি টেবিল গুছিয়ে রাখতে এই কলমদানি প্রিমিয়াম একটি চমৎকার আইটেম। কলম, কাঁচি, মার্কারসহ ছোট ছোট সামগ্রী এক জায়গায় রাখার জন্য আদর্শ।"
-       },
-       {
-           id: 109,
-           name: "সেভিংস বক্স প্রিমিয়াম",
-           cat: "box",
-           price: 650,
-           oldPrice: 813,
-           img: "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
-           images: [
-               "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
-               "https://i.postimg.cc/HWNw8sKk/Screenshot-2025-12-01-13-02-12-03-99c04817c0de5652397fc8b56c3b3817.jpg",
-               "https://i.postimg.cc/GmLGZ8T4/Screenshot-2025-12-01-13-14-37-27-99c04817c0de5652397fc8b56c3b3817.jpg"
-           ],
-           highlights: ["সুন্দর ফিনিশিং", "সেভিংস"],
-           desc: "টাকা জমানোর অভ্যাস তৈরি করতে মানি সেভিং বক্স দারুণ মোটিভেশন তৈরি করে। সুন্দর কাঠের ফিনিশিং এবং প্রিন্টেড ডিজাইন একে শো-পিস হিসেবেও ব্যবহারযোগ্য করে তুলেছে।"
        },
        {
            id: 110,
@@ -872,7 +889,7 @@
    let discount = 0;
    let timerInt;
    let modalImages = [];
-   let currentList = products.slice();  // sorting এর জন্য
+   let currentList = products.slice();
 
    const PAY_NUM = "01709288934";
    const ADMIN_MAIL = "arafatrahmansiyam2024@gmail.com";
@@ -883,7 +900,7 @@
            setTimeout(() => {
                document.getElementById('splash-screen').style.display = 'none';
                document.getElementById('app-container').style.display = 'block';
-               initBanner(); // Start banner animation
+               initDynamicBanner(); // START NEW ANIMATION
            }, 500);
        }, 1500);
 
@@ -893,26 +910,64 @@
        renderWishlist();
    };
 
-   // BANNER LOGIC
-   function initBanner() {
-       const bImages = [
-           "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
-           "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
-           "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
-           "https://i.postimg.cc/4dwjZX0q/IMG-20251110-WA0006.jpg"
+   // --- NEW MYGP/BKASH STYLE BANNER LOGIC ---
+   function initDynamicBanner() {
+       const bannerData = [
+           {
+               title: "স্পেশাল অফার!",
+               text: "যেকোনো কম্বো প্যাকে ২০% ছাড়",
+               tag: "আজকের ডিল",
+               img: "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg",
+               bg: "linear-gradient(135deg, #5D4037 0%, #3E2723 100%)" // Brown
+           },
+           {
+               title: "মেডিসিন বক্স",
+               text: "ঔষধ গুছিয়ে রাখুন নিরাপদে",
+               tag: "বেস্ট সেলার",
+               img: "https://i.postimg.cc/k5j9MZ5W/Screenshot-2025-12-01-13-08-08-79-99c04817c0de5652397fc8b56c3b3817.jpg",
+               bg: "linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%)" // Green
+           },
+           {
+               title: "সেভিংস বক্স",
+               text: "টাকা জমানোর নতুন উপায়",
+               tag: "জনপ্রিয়",
+               img: "https://i.postimg.cc/FsgK5T0M/Screenshot-2025-12-01-13-14-24-67-99c04817c0de5652397fc8b56c3b3817.jpg",
+               bg: "linear-gradient(135deg, #F57F17 0%, #BF360C 100%)" // Orange
+           }
        ];
-       let bIdx = 0;
+
+       let idx = 0;
+       const container = document.getElementById('main-banner');
+       const content = document.getElementById('banner-content');
+       const titleEl = document.getElementById('banner-title');
+       const textEl = document.getElementById('banner-text');
+       const tagEl = document.getElementById('banner-tag');
        const imgEl = document.getElementById('banner-img');
-       
+
        setInterval(() => {
-           bIdx = (bIdx + 1) % bImages.length;
-           // simple fade effect
-           imgEl.style.opacity = '0';
+           // 1. Fade Out
+           content.classList.add('fade-out');
+           content.classList.remove('fade-in');
+
            setTimeout(() => {
-               imgEl.src = bImages[bIdx];
-               imgEl.style.opacity = '1';
-           }, 200);
-       }, 3500); // Change image every 3.5 seconds
+               // 2. Change Content
+               idx = (idx + 1) % bannerData.length;
+               const data = bannerData[idx];
+               
+               titleEl.innerText = data.title;
+               textEl.innerText = data.text;
+               tagEl.innerText = data.tag;
+               imgEl.src = data.img;
+               
+               // Change Background of container
+               container.style.background = data.bg;
+
+               // 3. Fade In
+               content.classList.remove('fade-out');
+               content.classList.add('fade-in');
+           }, 400); // Wait for fade out to finish
+
+       }, 4000); // Change every 4 seconds
    }
 
    function initCats() {
@@ -1299,4 +1354,4 @@
    }
 </script>
 </body>
-                        </html>
+                                              </html>
