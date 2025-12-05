@@ -112,10 +112,8 @@
            color: var(--primary-dark);
            font-weight: 500;
            position: absolute;
-           /* 40s মানে ৪০ সেকেন্ড সময় নেবে, এটি বাড়ালে আরও স্লো হবে */
            animation: ticker 40s linear infinite; 
        }
-       /* মাউস বা টাচ করলে লেখা থামবে */
        .news-scroll-box:hover .news-text {
            animation-play-state: paused;
        }
@@ -668,6 +666,21 @@
            desc: "টাকা জমানোর অভ্যাস তৈরি করতে মানি সেভিং বক্স দারুণ মোটিভেশন তৈরি করে। সুন্দর কাঠের ফিনিশিং এবং প্রিন্টেড ডিজাইন একে শো-পিস হিসেবেও ব্যবহারযোগ্য করে তুলেছে।"
        },
        {
+           id: 118,
+           name: "50K Saving Box",
+           cat: "box",
+           price: 499,
+           oldPrice: 624,
+           img: "https://i.postimg.cc/bNVLbwwQ/IMG-20251205-WA0006.jpg",
+           images: [
+               "https://i.postimg.cc/bNVLbwwQ/IMG-20251205-WA0006.jpg",
+               "https://i.postimg.cc/rsryJmLK/IMG-20251205-WA0007.jpg",
+               "https://i.postimg.cc/4xbbJ6Fq/IMG-20251205-WA0008.jpg"
+           ],
+           highlights: ["সেভিংস হ্যাবিট", "গিফটের জন্য পারফেক্ট"],
+           desc: "৫০,০০০ টাকা পর্যন্ত সেভিংসের লক্ষ্য নিয়ে ডিজাইন করা এই 50K Saving Box টি টাকা জমানোর মজার এবং মোটিভেশনাল একটি উপায়। গিফট হিসেবেও চমৎকার মানাবে।"
+       },
+       {
            id: 101,
            name: "কাঠের টিস্যু বক্স",
            cat: "box",
@@ -1074,7 +1087,6 @@
        document.getElementById('drawer-count').innerText = count;
        document.getElementById('cart-total').innerText = `৳${total}`;
 
-       // Float Btn
        const floatBtn = document.getElementById('float-cart-btn');
        if(count > 0) floatBtn.classList.add('show');
        else floatBtn.classList.remove('show');
@@ -1315,4 +1327,4 @@
    }
 </script>
 </body>
-                                             </html>
+</html>
