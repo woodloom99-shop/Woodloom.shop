@@ -285,6 +285,47 @@
        .float-cart.show { display: flex; }
        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
 
+       /* CUSTOM CHAT BUTTON (ছোট ও ইউনিক) */
+       .custom-chat-btn {
+           position: fixed;
+           bottom: 130px;        /* কার্ট বাটনের একটু উপরে */
+           right: 20px;
+           width: 42px;
+           height: 42px;
+           border-radius: 50%;
+           background: radial-gradient(circle at 30% 30%, #FFC107, #5D4037);
+           box-shadow: 0 6px 16px rgba(0,0,0,0.28);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           z-index: 4950;
+           cursor: pointer;
+           animation: chatFloat 2s ease-in-out infinite;
+       }
+
+       .custom-chat-btn i {
+           font-size: 18px;      /* ছোট আইকন */
+           color: #fff;
+       }
+
+       .custom-chat-btn span {
+           position: absolute;
+           bottom: 48px;
+           right: 0;
+           background: #fff;
+           color: #5D4037;
+           font-size: 10px;
+           padding: 3px 7px;
+           border-radius: 999px;
+           box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+           font-weight: 600;
+       }
+
+       @keyframes chatFloat {
+           0%, 100% { transform: translateY(0); }
+           50%      { transform: translateY(-4px); }
+       }
+
        @media (max-width: 400px) { .bottom-sheet { max-height: 92vh; } }
    </style>
 </head>
@@ -427,6 +468,12 @@
 
 <div class="float-cart" id="float-cart-btn" onclick="toggleCart()">
     <i class="fa-solid fa-cart-shopping"></i>
+</div>
+
+<!-- Custom ছোট কাস্টমার মেসেজ / চ্যাট বাটন -->
+<div class="custom-chat-btn" onclick="openSupportChat()">
+    <i class="fa-solid fa-comment-dots"></i>
+    <span>চ্যাট</span>
 </div>
 
 <div class="modal-overlay" id="product-backdrop" onclick="closeProductModal()"></div>
@@ -617,10 +664,11 @@
         <i class="fa-solid fa-book-open"></i>
         <span>গাইড</span>
     </div>
-    <a href="https://wa.me/8801709288934" target="_blank" class="nav-item">
-        <i class="fa-brands fa-whatsapp"></i>
+    <!-- WhatsApp এর বদলে এখন tawk.to চ্যাট ওপেন করবে -->
+    <div class="nav-item" onclick="openSupportChat()">
+        <i class="fa-solid fa-comments"></i>
         <span>চ্যাট</span>
-    </a>
+    </div>
 </nav>
 
 <div id="toast-box"></div>
@@ -690,7 +738,7 @@
            images: [
                "https://i.postimg.cc/vTGcTXcc/IMG-20251109-WA0001.jpg"
            ],
-           highlights: ["প্রিমিয়াম কাঠ", "হ্যান্ডমেইড"],
+           highlights: ["прিমিয়াম কাঠ", "হ্যান্ডমেইড"],
            desc: "ড্রইংরুমের জন্য প্রিমিয়াম টিস্যু বক্স। প্রতিদিনের ব্যবহারে টেকসই, সহজে পরিষ্কার করা যায় এবং যেকোনো টেবিলকে স্টাইলিশ করে তোলে।"
        },
        {
@@ -1325,6 +1373,38 @@
        document.getElementById('toast-box').appendChild(t);
        setTimeout(()=>t.remove(), 2500);
    }
+
+   // নতুন ফাংশন: tawk.to চ্যাট ওপেন করার জন্য
+   function openSupportChat() {
+       if (typeof Tawk_API !== "undefined" && Tawk_API.maximize) {
+           Tawk_API.maximize();
+       } else {
+           toast("চ্যাট লোড হচ্ছে, একটু পরে চেষ্টা করুন");
+       }
+   }
 </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+
+// Tawk লোড হয়ে গেলে ডিফল্ট উইজেট বাটন হাইড
+Tawk_API.onLoad = function () {
+    if (Tawk_API.hideWidget) {
+        Tawk_API.hideWidget();
+    }
+};
+
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6933e57a69e4af19800b5f9f/1jbpbgq1t';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
 </body>
 </html>
